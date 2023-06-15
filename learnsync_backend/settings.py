@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'subscription',
     'learnsync_app',
     'graphene_django',
     'allauth',

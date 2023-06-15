@@ -1,20 +1,2 @@
 Access Token: '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'
 
-User Profile Model:
-
-Fields: user (OneToOneField to User), bio (TextField), profile_image (ImageField), social_site_urls (CharField or URLField), etc.
-Thesis Paper Model:
-
-Fields: title (CharField), description (TextField), file (FileField or URLField), author (ForeignKey to User), tags (ManyToManyField to Tag model), category (ForeignKey to Category model), created_at (DateTimeField), etc.
-Research Paper Model:
-
-Fields: title (CharField), description (TextField), file (FileField or URLField), author (ForeignKey to User), tags (ManyToManyField to Tag model), category (ForeignKey to Category model), created_at (DateTimeField), etc.
-Assignment Model:
-
-Fields: title (CharField), description (TextField), file (FileField or URLField), author (ForeignKey to User), tags (ManyToManyField to Tag model), category (ForeignKey to Category model), created_at (DateTimeField), etc.
-Tag Model:
-
-Fields: name (CharField)
-Category Model:
-
-Fields: name (CharField)
