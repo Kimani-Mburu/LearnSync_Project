@@ -99,20 +99,20 @@ class ThesisPaper(models.Model):
 
 class ResearchPaper(models.Model):
     title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
     authors = models.ManyToManyField(UserProfile)
     abstract = models.TextField()
-    slug = models.SlugField(unique=True)
     tags = models.ManyToManyField(Tag)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     file = models.FileField(upload_to='research_papers/')
     published_date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.title
-
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return self.title
 
     def get_absolute_url(self):
         return reverse('research_paper_detail', kwargs={'slug': self.slug})
