@@ -10,4 +10,4 @@ def profile_view(request):
     context = {
         'user': user,
     }
-    return render(request, 'profile.html', context)
+    return render(request, 'accounts/profile.html', context)

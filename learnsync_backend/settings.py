@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'watchman',
 ]
 
 GRAPHENE = {
@@ -94,8 +95,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'accounts/templates'),
-            os.path.join(BASE_DIR, 'learnsync_app/templates'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -176,3 +176,18 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Watchman settings
+WATCHMAN_INSTALLED_APPS = []
+
+WATCHMAN_TRIGGER = {
+    'COMMANDS': [
+        # Specify the command(s) to execute when changes occur
+        'collectstatic',
+    ],
+    'DIRECTORY': [
+        # Specify the directories to monitor for changes
+        ('/templates', '/static'),
+    ],
+}
