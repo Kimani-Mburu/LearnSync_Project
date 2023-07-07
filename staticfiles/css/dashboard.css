@@ -1,0 +1,179 @@
+body {
+    font-family: 'EB Garamond', sans-serif;
+    background-color: #f2f2f2;
+    margin-top: 5px;
+  }
+
+  /* Header Styles */
+  header {
+    background-color: #007bff;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Main Content Section */
+  section {
+    display: flex;
+    flex-wrap: wrap; /* To allow columns to wrap on smaller screens */
+    justify-content: space-between;
+  }
+
+  /* Left Column Styles */
+  .left-column {
+    flex-basis: 100%; /* Full width on small screens */
+    padding: 20px;
+  }
+
+  /* Right Column Styles */
+  .right-column {
+    flex-basis: 100%; /* Full width on small screens */
+    padding: 20px;
+  }
+
+  /* Common Card Styles */
+  .card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  /* Profile Card Styles */
+  .profile-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  .profile-details {
+    flex: 1;
+  }
+
+  /* Notifications List Styles */
+  .notifications-list {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+
+  .notification-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .notification-icon {
+    background-color: #007bff;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  /* Recent Activities Styles */
+  .recent-activity-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .activity-line {
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    left: 9px;
+  }
+
+  .activity-date {
+    padding-left: 30px;
+  }
+
+  /* Social Media Accounts Styles */
+  .social-media-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+
+  .social-media-item {
+    margin-bottom: 10px;
+  }
+
+  /* Visualization Styles */
+  #myChart {
+    width: 100%;
+    height: 300px;
+  }
+
+  /* Media Queries for Mobile Responsiveness */
+  @media screen and (max-width: 768px) {
+      /* Header Styles */
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      /* Left Column Styles */
+      .left-column {
+        flex-basis: 100%;
+      }
+    
+      /* Right Column Styles */
+      .right-column {
+        flex-basis: 100%;
+      }
+    
+      /* Profile Card Styles */
+      .profile-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .profile-avatar {
+        margin: 0 auto 10px auto;
+      }
+    
+      /* Recent Activities Styles */
+      .recent-activity-item {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .activity-line {
+        display: none;
+      }
+    
+      .activity-date {
+        padding-left: 0;
+        margin-top: 10px;
+      }
+    }
+    
+    @media screen and (max-width: 576px) {
+      /* Section Styles */
+      section {
+        flex-direction: column;
+      }
+      
+      /* Left Column Styles */
+      .left-column,
+      .right-column {
+        flex-basis: 100%;
+      }
+    }

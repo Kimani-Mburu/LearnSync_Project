@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'accounts',
     'subscription',
     'learnsync_app',
+    'forum',
     'graphene_django',
     'allauth',
     'allauth.account',
