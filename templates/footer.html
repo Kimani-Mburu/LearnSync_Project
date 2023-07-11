@@ -1,34 +1,43 @@
+
 <footer style="background-color: #333; color: #fff; padding: 20px;">
     <div class="container">
         <div class="row">
             <div class="col-md-4" style="margin-bottom: 20px;">
                 <h4 style="margin-bottom: 10px;">Categories</h4>
-                <ul style="list-style: none; padding-left: 0;">
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Research Papers</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Thesis Documents</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Assignments</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Essays</a></li>
-                </ul>
+                <div class="d-flex flex-wrap">
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Research Papers</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Thesis Documents</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Assignments</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Essays</a>
+                </div>
             </div>
             <div class="col-md-4" style="margin-bottom: 20px;">
                 <h4 style="margin-bottom: 10px;">Tags</h4>
-                <ul style="list-style: none; padding-left: 0;">
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Science</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Technology</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Engineering</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Mathematics</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Social Sciences</a></li>
-                </ul>
+                <div class="d-flex flex-wrap">
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Science</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Technology</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Engineering</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Mathematics</a>
+                    <a href="#" class="btn btn-sm btn-secondary m-1">Social Sciences</a>
+                </div>
             </div>
             <div class="col-md-4" style="margin-bottom: 20px;">
-                <h4 style="margin-bottom: 10px;">Additional Information</h4>
-                <ul style="list-style: none; padding-left: 0;">
-                    <li><a href="#" style="color: #fff; text-decoration: none;">About Us</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">FAQs</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Terms of Service</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Privacy Policy</a></li>
-                    <li><a href="#" style="color: #fff; text-decoration: none;">Contact Us</a></li>
-                </ul>
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <h6 class="text-white text-uppercase font-weight-bold">Get In Touch</h6>
+                        <p class="font-weight-medium"><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
+                        <p class="font-weight-medium"><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
+                        <p class="font-weight-medium"><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <h6 class="text-white text-uppercase font-weight-bold">Follow Us</h6>
+                        <div class="d-flex justify-content-start">
+                            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -41,3 +50,22 @@
         </div>
     </div>
 </footer>
+<a href="#" class="btn btn-primary btn-square back-to-top" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: none; width: 40px; height: 40px; border-radius: 50%; background-color: #428bca; color: #fff; text-align: center; font-size: 20px; line-height: 40px; cursor: pointer;"><i class="fa fa-arrow-up"></i></a>
+
+
+<script>
+// Back to top button behavior
+$(document).ready(function() {
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 100) {
+            $('.back-to-top').fadeIn();
+        } else {
+            $('.back-to-top').fadeOut();
+        }
+    });
+    $('.back-to-top').click(function() {
+        $('html, body').animate({scrollTop : 0}, 800);
+        return false;
+    });
+});
+</script>

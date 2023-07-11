@@ -5,65 +5,322 @@
 {% endblock %}
 {% block main %}
 
-<div style="max-width: 900px; margin: 0 auto; padding: 20px; display: flex; justify-content: space-between;">
-  <div style="flex-basis: 70%;">
-    <div style="margin-bottom: 30px;">
-      <h2 style="font-size: 28px; font-weight: bold; color: #1da1f2; margin-bottom: 10px;">Paper Title</h2>
-      <p style="font-size: 16px; color: #777; margin-bottom: 10px;">Author: John Doe</p>
-      <div style="margin-bottom: 20px;">
-        <img src="{% static 'img/img.jpg' %}" alt="Paper Preview" style="max-width: 100%; height: auto;">
-      </div>
-      <p style="font-size: 16px; color: #333; margin-bottom: 15px;">Abstract: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed gravida vestibulum dolor a porttitor.</p>
-    </div>
-
-    <div style="margin-bottom: 30px;">
-      <h3 style="font-size: 20px; font-weight: bold; color: #1da1f2; margin-bottom: 10px;">Details</h3>
-      <ul style="list-style: none; padding: 0; margin: 0;">
-        <li style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>Published:</strong> July 1, 2023</li>
-        <li style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>Category:</strong> Science</li>
-        <li style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>Keywords:</strong> Research, Study, Analysis</li>
-        <li style="font-size: 16px; color: #333; margin-bottom: 10px;"><strong>DOI:</strong> 10.1234/56789</li>
-      </ul>
-    </div>
-
-    <div>
-      <h3 style="font-size: 20px; font-weight: bold; color: #1da1f2; margin-bottom: 20px;">Comments</h3>
-      <div style="border: 1px solid #eee; padding: 20px; margin-bottom: 15px;">
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-          <img src="https://example.com/user_avatar.jpg" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-          <p style="font-size: 16px; font-weight: bold; color: #1da1f2; margin-bottom: 5px;">User123</p>
+<div style="max-width: 100%; padding: 20px;">
+  
+  <div style="border: 2px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+      <div style="flex-basis: 70%; margin-bottom: 20px;">
+        <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 10px;">Paper Title</h1>
+        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">Author: John Doe</p>
+        <div style="display: flex; align-items: center; color: #777;">
+          <i class="bi bi-journal-check" style="font-size: 18px; margin-right: 5px;"></i>
+          <p style="font-size: 14px; margin-bottom: 0; font-weight: bold;">Citations:</p>
+          <p style="font-size: 14px; margin: 0 5px;">10</p>
+          <i class="bi bi-eye-fill" style="font-size: 18px; margin-right: 5px;"></i>
+          <p style="font-size: 14px; margin-bottom: 0; font-weight: bold;">Full Text Views:</p>
+          <p style="font-size: 14px; margin: 0 5px;">100</p>
         </div>
-        <p style="font-size: 16px; color: #333; margin-bottom: 0;">This paper is very insightful. I enjoyed reading it.</p>
       </div>
-      <div style="border: 1px solid #eee; padding: 20px; margin-bottom: 15px;">
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-          <img src="https://example.com/user_avatar.jpg" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-          <p style="font-size: 16px; font-weight: bold; color: #1da1f2; margin-bottom: 5px;">User456</p>
+      
+      <div style="flex-basis: 30%; display: flex; justify-content: flex-end; align-items: center;">
+        <a href="#" style="margin-right: 10px;" class="btn btn-primary">Download</a>
+        <button onclick="toggleCitation()" style="margin-right: 10px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#citationModal">Toggle Citation</button>
+        <button style="padding: 8px 16px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; font-size: 14px;" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-header">Share</li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-envelope-fill" style="margin-right: 5px;"></i>Email</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-twitter" style="margin-right: 5px;"></i>Twitter</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-facebook" style="margin-right: 5px;"></i>Facebook</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-linkedin" style="margin-right: 5px;"></i>LinkedIn</a></li>
+        </ul>      </div>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="citationModal" tabindex="-1" aria-labelledby="citationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="citationModalLabel">Citation Text</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <p style="font-size: 16px; color: #333; margin-bottom: 0;">Great research! I found the results fascinating.</p>
+        <div class="modal-body">
+          <!-- Add tab navigation -->
+          <ul class="nav nav-tabs" id="citationTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="plainTextTab" data-bs-toggle="tab" data-bs-target="#plainText" type="button" role="tab" aria-controls="plainText" aria-selected="true">Plain Text</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="bibtexTab" data-bs-toggle="tab" data-bs-target="#bibtex" type="button" role="tab" aria-controls="bibtex" aria-selected="false">BibTeX</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="risTab" data-bs-toggle="tab" data-bs-target="#ris" type="button" role="tab" aria-controls="ris" aria-selected="false">RIS</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="refworksTab" data-bs-toggle="tab" data-bs-target="#refworks" type="button" role="tab" aria-controls="refworks" aria-selected="false">RefWorks</button>
+            </li>
+          </ul>
+  
+          <!-- Add tab content -->
+          <div class="tab-content mt-3" id="citationTabContent">
+            <div class="tab-pane fade show active border rounded-lg p-3" id="plainText" role="tabpanel" aria-labelledby="plainTextTab">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec nunc nibh. Morbi bibendum nisi a fringilla tincidunt.</p>
+            </div>
+            <div class="tab-pane fade border rounded-lg p-3" id="bibtex" role="tabpanel" aria-labelledby="bibtexTab">
+              <p>BibTeX citation text goes here.</p>
+            </div>
+            <div class="tab-pane fade border rounded-lg p-3" id="ris" role="tabpanel" aria-labelledby="risTab">
+              <p>RIS citation text goes here.</p>
+            </div>
+            <div class="tab-pane fade border rounded-lg p-3" id="refworks" role="tabpanel" aria-labelledby="refworksTab">
+              <p>RefWorks citation text goes here.</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="copyToClipboardBtn">Copy to Clipboard</button>
+        </div>
       </div>
     </div>
   </div>
-
-  <div style="flex-basis: 28%;">
-    <div style="background-color: #f5f8fa; padding: 20px;">
-      <h2 style="font-size: 28px; font-weight: bold; color: #1da1f2; margin-bottom: 20px;">Related Papers</h2>
-      <ul style="list-style: none; padding: 0; margin: 0;">
-        <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-          <a href="#" style="font-size: 18px; color: #1da1f2; text-decoration: none; display: block; margin-bottom: 5px;">Paper 1</a>
-          <p style="font-size: 16px; color: #333; margin-bottom: 0;">Author: Jane Doe</p>
-        </li>
-        <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-          <a href="#" style="font-size: 18px; color: #1da1f2; text-decoration: none; display: block; margin-bottom: 5px;">Paper 2</a>
-          <p style="font-size: 16px; color: #333; margin-bottom: 0;">Author: John Smith</p>
-        </li>
-        <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-          <a href="#" style="font-size: 18px; color: #1da1f2; text-decoration: none; display: block; margin-bottom: 5px;">Paper 3</a>
-          <p style="font-size: 16px; color: #333; margin-bottom: 0;">Author: Sarah Johnson</p>
-        </li>
-      </ul>
+  
+    <div class="row">
+    <div class="col-md-3">
+      <aside style="background-color: #f5f8fa; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li>
+            <a href="#section1" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Abstract</a>
+          </li>
+          <li>
+            <a href="#section2" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Preview</a>
+          </li>
+          <li>
+            <a href="#section3" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Author (s')</a>
+          </li>
+          <li>
+            <a href="#section4" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">References</a>
+          </li>
+        </ul>
+      </aside>
+      
+    
+      
+    </div>
+    
+    <div class="col-md-6">
+      <div style="background-color: #f9f9f9; border-radius: 10px; padding: 10px; margin-bottom: 20px;">
+        <div class="accordion" id="accordionSections">
+          <div class="accordion-item" id="section1">
+            <h2 class="accordion-header" id="section1Header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#section1Collapse" aria-expanded="true" aria-controls="section1Collapse">
+                Abstract
+              </button>
+            </h2>
+            <div id="section1Collapse" class="accordion-collapse collapse show" aria-labelledby="section1Header" data-bs-parent="#accordionSections">
+              <div class="accordion-body">
+                <div style="background-color: #f5f8fa; border-radius: 10px; padding: 5px;">
+                  <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Abstract</h2>
+                  <div style="background-color: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Abstract:</h3>
+                    <p style="font-size: 16px; margin-bottom: 10px;">Introduced the Android platform and the features of Android applications, gave a detailed description of Android application framework from the prospective of developers. A simple music player is provided as an instance to illustrate the basic working processes of Android application components. This paper could provide guidance to understanding the operation mechanism of Android applications and to developing applications on the Android platform.</p>
+                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>Published in:</strong> 2011 4th International Conference on Intelligent Networks and Intelligent Systems</p>
+                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>Date of Conference:</strong> 01-03 November 2011</p>
+                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>Date Added to LearnSync:</strong> 15 December 2011</p>
+                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>ISBN Information:</strong> INSPEC Accession Number: 12440558</p>
+                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>DOI:</strong> 10.1109/ICINIS.2011.40</p>
+                    <p style="font-size: 14px; margin-bottom: 0;"><strong>Publisher:</strong> LearnSync</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="accordion-item" id="section2">
+            <h2 class="accordion-header" id="section2Header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section2Collapse" aria-expanded="false" aria-controls="section2Collapse">
+                Preview
+              </button>
+            </h2>
+            <div id="section2Collapse" class="accordion-collapse collapse" aria-labelledby="section2Header" data-bs-parent="#accordionSections">
+              <div class="accordion-body">
+                <div style="background-color: #f5f8fa; border-radius: 10px; padding: 5px;">
+                  <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Preview</h2>
+                  <div style="background-color: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                    <div style="position: relative;">
+                      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <button class="btn btn-primary">Sign In to Access Full Document</button>
+                      </div>
+                      <embed src="https://journals.sagepub.com/doi/full/10.1177/1534484320903890" type="application/pdf" style="width: 100%; height: 400px;">
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              
+            </div>
+          </div>
+          
+          <div class="accordion-item" id="section3">
+            <h2 class="accordion-header" id="section3Header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section3Collapse" aria-expanded="false" aria-controls="section3Collapse">
+                Author(s')
+              </button>
+            </h2>
+            <div id="section3Collapse" class="accordion-collapse collapse" aria-labelledby="section3Header" data-bs-parent="#accordionSections">
+              <div class="accordion-body" role="tabpanel" id="authors" aria-labelledby="authors-header">
+                <div class="authors-accordion-container">
+                  <div class="author-card text-base-md-lh">
+                    <div class="row g-0">
+                      <div class="col-24-24">
+                        <div>
+                          <a href="/author/38240052100">
+                            <span>Jianye Liu</span>
+                          </a>
+                        </div>
+                        <div>
+                          School of Information, Yunnan University of Finance and Economics, KunMing, China
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="authors-accordion-container">
+                  <div class="author-card text-base-md-lh">
+                    <div class="row g-0">
+                      <div class="col-24-24">
+                        <div>
+                          <a href="/author/37597024300">
+                            <span>Jiankun Yu</span>
+                          </a>
+                        </div>
+                        <div>
+                          School of Information, Yunnan University of Finance and Economics, KunMing, China
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+          <div class="accordion-item" id="section4">
+            <h2 class="accordion-header" id="section4Header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section4Collapse" aria-expanded="false" aria-controls="section4Collapse">
+                References
+              </button>
+            </h2>
+            <div id="section4Collapse" class="accordion-collapse collapse" aria-labelledby="section4Header" data-bs-parent="#accordionSections">
+              <div class="accordion-body">
+                <div class="accordion-body collapse show" id="references" aria-labelledby="references-header">
+                  <section id="references-anchor" class="document-all-references text-base-md-lh">
+                    <div class="u-mb-1 reference-header-container">
+                      <span class="citation-map-button">
+                        <a class="citation-map-button">References &amp; Cited By</a>
+                      </span>
+                    </div>
+                    <div id="references-section-container" class="document-ft-section-container">
+                      <div tabindex="0" class="hide-mobile u-mb-1">
+                        <input type="checkbox" class="u-mr-1 ng-untouched ng-pristine ng-valid">
+                        <span>Select All</span>
+                      </div>
+                      <div>
+                        <div class="reference-container" style="border-bottom: 1px solid #ccc;">
+                          <div class="d-flex u-overflow-wrap-break-word">
+                            <div class="hide-mobile u-pr-2"></div>
+                            <div class="number"><b>1.</b></div>
+                            <div class="col u-px-1">
+                              <div>OL. Google Android Developers, Android Develop Guide, http://developer.android.com/guide/topics/fundamentals.html</div>
+                              <div class="ref-links-container stats-reference-links-container">
+                                <span class="ref-link">
+                                  <a class="stats-reference-link-showContext">
+                                    <i class="icon-caret-abstract"></i>
+                                    <span>Show in Context</span>
+                                  </a>
+                                </span>
+                                <span class="ref-link">
+                                  <a target="_blank" class="stats-reference-link-googleScholar" href="https://scholar.google.com/scholar?as_q=Android+Develop+Guide&amp;as_occt=title&amp;hl=en&amp;as_sdt=0%2C31">
+                                    Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
+                                  </a>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="reference-container" style="border-bottom: 1px solid #ccc;">
+                          <div class="d-flex u-overflow-wrap-break-word">
+                            <div class="hide-mobile u-pr-2"></div>
+                            <div class="number"><b>2.</b></div>
+                            <div class="col u-px-1">
+                              <div>M. Fengsheng Yang, Android Application Development Revelation, China Machine Press, 2010, 1</div>
+                              <div class="ref-links-container stats-reference-links-container">
+                                <span class="ref-link">
+                                  <a target="_blank" class="stats-reference-link-googleScholar" href="https://scholar.google.com/scholar?as_q=Android+Application+Development+Revelation&amp;as_occt=title&amp;hl=en&amp;as_sdt=0%2C31">
+                                    Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
+                                  </a>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="reference-container" style="border-bottom: 1px solid #ccc;">
+                          <div class="d-flex u-overflow-wrap-break-word">
+                            <div class="hide-mobile u-pr-2"></div>
+                            <div class="number"><b>3.</b></div>
+                            <div class="col u-px-1">
+                              <div>M. Zhengguo Hu, Jian Wu, Zhenggong Deng, Programming Methodology, National Defence Industry Press, 2008, 6</div>
+                              <div class="ref-links-container stats-reference-links-container">
+                                <span class="ref-link">
+                                  <a target="_blank" class="stats-reference-link-googleScholar" href="https://scholar.google.com/scholar?as_q=Programming+Methodology&amp;as_occt=title&amp;hl=en&amp;as_sdt=0%2C31">
+                                    Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
+                                  </a>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          
+          
+        </div>
+      </div>
+    </div>
+            
+    <div class="col-md-3">
+      <aside style="background-color: #f5f8fa; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+        <p>Right Sidebar Content</p>
+      </aside>
     </div>
   </div>
 </div>
 
+
 {% endblock main %}
+{% block extra_scripts %}
+
+<script>
+  // Copy to Clipboard functionality
+  const copyToClipboardBtn = document.getElementById('copyToClipboardBtn');
+  const plainTextContent = document.getElementById('plainText');
+
+  copyToClipboardBtn.addEventListener('click', () => {
+    const textToCopy = plainTextContent.innerText;
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        alert('Citation copied to clipboard!');
+      })
+      .catch((error) => {
+        console.error('Failed to copy citation to clipboard:', error);
+      });
+  });
+</script>
+
+{% endblock  %}
