@@ -71,10 +71,22 @@
     <div style="max-width: 800px; margin: 0 auto; padding: 20px; text-align: center;">
         <h2 style="font-size: 28px; margin-bottom: 20px;">Discover Valuable Research Materials</h2>
         <p style="font-size: 18px; margin-bottom: 30px;">Explore our extensive collection of research papers, thesis documents, assignments, and more.</p>
-        <form action="#"  style="position: relative;">
-          <input type="text" name="search" placeholder="Search papers, theses, and more" style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 20px;">
-          <button type="submit" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background-color: transparent; border: none;"><i class="bi bi-search" style="font-size: 24px; color: #007bff;"></i></button>
+        <!-- Search Form -->
+        <form action="{% url 'learnsync_app:search_results' %}" method="GET" style="position: relative;">
+            <input type="text" name="search" id="search-input" placeholder="Search papers, theses, and more" style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 20px;">
+            <button type="submit" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background-color: transparent; border: none;">
+                <i class="bi bi-search" style="font-size: 24px; color: #007bff;"></i>
+            </button>
+            <div id="search-suggestions-container" style="display: none;"></div>
         </form>
+
+        
+        
+        
+        
+          
+           
+
         <p></p>
         <p></p>
         <p></p>
@@ -102,7 +114,7 @@
       
       
 <!-- Featured Research Papers Section -->
-<section style="background-color: #fff; padding: 50px; text-align: center;">
+{% comment %} <section style="background-color: #fff; padding: 50px; text-align: center;">
     <h3 style="font-size: 24px; margin-bottom: 20px;">Featured Research Papers</h3>
     <div class="row">
         <div class="col-md-4" style="border-radius: 25px; margin-bottom: 20px;">
@@ -163,7 +175,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> {% endcomment %}
 
 <!-- Subscription Plans Section -->
 <section style="background-color: #f2f2f2; padding: 50px; text-align: center;">
@@ -191,7 +203,7 @@
 </section>
 
 <!-- Featured Thesis Papers Section -->
-<section style="background-color: #fff; padding: 50px; text-align: center;">
+{% comment %} <section style="background-color: #fff; padding: 50px; text-align: center;">
     <h3 style="font-size: 24px; margin-bottom: 20px;">Featured Thesis Papers</h3>
     <div id="thesisCarousel" class="carousel slide" data-bs-ride="carousel">
         <ol class="carousel-indicators" style="position: absolute; bottom: 20px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 1;">
@@ -368,9 +380,6 @@
     </div>
 </section>
 
-
-
-
 <!-- Featured Assignments Section -->
 <section style="background-color: #fff; padding: 50px; text-align: center;">
     <h3 style="font-size: 24px; margin-bottom: 20px;">Featured Assignments </h3>
@@ -433,7 +442,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> {% endcomment %}
 
 
 <!-- Testimonials Section -->
@@ -529,6 +538,55 @@
         });
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Function to fetch and display search suggestions
+    function fetchSuggestions(query) {
+        $.ajax({
+            url: "{% url 'learnsync_app:search_suggestions' %}",
+            data: { query: query },
+            dataType: 'json',
+            success: function(data) {
+                // Build and display the suggestions pop-up
+                var suggestionsContainer = $('#search-suggestions-container');
+                suggestionsContainer.empty();
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var suggestion = data[i].title;
+                        var suggestionItem = $('<div class="suggestion-item">' + suggestion + '</div>');
+                        suggestionsContainer.append(suggestionItem);
+                    }
+                    suggestionsContainer.show();
+                } else {
+                    suggestionsContainer.hide();
+                }
+            },
+            error: function(error) {
+                console.log('Error fetching search suggestions:', error);
+            }
+        });
+    }
+
+    // Handle user input in the search box
+    $('#search-input').on('input', function() {
+        var query = $(this).val().trim();
+        if (query.length > 0) {
+            fetchSuggestions(query);
+        } else {
+            $('#search-suggestions-container').hide();
+        }
+    });
+
+    // Handle clicks outside the suggestions pop-up to hide it
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('#search-suggestions-container').length) {
+            $('#search-suggestions-container').hide();
+        }
+    });
+});
+</script>
+
     
 {% endblock %}
 

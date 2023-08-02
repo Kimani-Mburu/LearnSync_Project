@@ -1,95 +1,189 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block extra_stylesheets %}
 
 {% endblock %}
 {% block main %}
 
-<div class="topbar" style="background-color: #1da1f2; padding: 20px; text-align: center; color: #fff;">
-    <ul class="category-list" style="list-style: none; padding: 0; margin: 0; display: inline-block;">
-        <li style="display: inline-block; margin: 0 10px;">
-            <a href="#" style="text-decoration: none; color: #fff; font-size: 18px; font-weight: bold;">Category 1</a>
+  <div class="topbar" style="background-color: #1da1f2; padding: 20px; text-align: center; color: #fff;">
+      <ul class="category-list" style="list-style: none; padding: 0; margin: 0; display: inline-block;">
+          <li style="display: inline-block; margin: 0 10px;">
+              <a href="#" style="text-decoration: none; color: #fff; font-size: 18px; font-weight: bold;">Category 1</a>
+          </li>
+          <li style="display: inline-block; margin: 0 10px;">
+              <a href="#" style="text-decoration: none; color: #fff; font-size: 18px; font-weight: bold;">Category 2</a>
+          </li>
+          <li style="display: inline-block; margin: 0 10px;">
+              <a href="#" style="text-decoration: none; color: #fff; font-size: 18px; font-weight: bold;">Category 3</a>
+          </li>
+      </ul>
+  </div>
+  <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; margin: 20px auto; max-width: 1200px;">
+    <div class="sidebar" style="background-color: #f5f8fa; padding: 20px;">
+      <h2 style="font-size: 28px; color: #1da1f2; margin-bottom: 20px;">Trends for You</h2>
+      <ul class="trends-list" style="list-style: none; padding: 0; margin: 0;">
+        <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+          <div class="d-flex align-items-center">
+            <div class="trend-icon" style="background-color: #1da1f2; color: #fff; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              <i class="bi bi-hashtag"></i>
+            </div>
+            <div class="trend-content" style="margin-left: 10px;">
+              <a href="#" style="text-decoration: none; color: #333; font-weight: bold; font-size: 18px;">#TrendingTopic</a>
+              <div class="trend-metadata" style="font-size: 16px; color: #777;">
+                <span>1.2K Tweets</span>
+                <span>1 hour ago</span>
+              </div>
+            </div>
+          </div>
         </li>
-        <li style="display: inline-block; margin: 0 10px;">
-            <a href="#" style="text-decoration: none; color: #fff; font-size: 18px; font-weight: bold;">Category 2</a>
+        <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+          <div class="d-flex align-items-center">
+            <div class="trend-icon" style="background-color: #1da1f2; color: #fff; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              <i class="bi bi-hashtag"></i>
+            </div>
+            <div class="trend-content" style="margin-left: 10px;">
+              <a href="#" style="text-decoration: none; color: #333; font-weight: bold; font-size: 18px;">#AnotherTrend</a>
+              <div class="trend-metadata" style="font-size: 16px; color: #777;">
+                <span>800 Tweets</span>
+                <span>2 hours ago</span>
+              </div>
+            </div>
+          </div>
         </li>
-        <li style="display: inline-block; margin: 0 10px;">
-            <a href="#" style="text-decoration: none; color: #fff; font-size: 18px; font-weight: bold;">Category 3</a>
-        </li>
-    </ul>
+        <!-- Add more trend items here -->
+      </ul>
+    </div>
+    
+    
+
+
+    <div class="content" style="background-color: #fff; padding: 10px; flex-grow: 1; width: 100%; max-width: 600px;">
+        <div class="container">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex align-items-start">
+                <div>
+                  <img src="{% static 'img/img.jpg' %}" alt="Profile Image" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                </div>
+                <div>
+                  <h5 class="card-title" style="font-size: 20px; font-weight: bold; color: #1da1f2;">John Doe</h5>
+                  <p class="username" style="font-size: 14px; color: #999;">@johndoe</p>
+                </div>
+              </div>
+              <div>
+                <p class="card-text" style="font-size: 16px; color: #333; margin-top: 10px;">Post content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <div class="post-meta d-flex justify-content-between flex-wrap" style="margin-top: 20px; color: #000;">
+                  <span class="icon view-icon mb-2 mb-md-0"><i class="bi bi-eye-fill"></i> 100 views</span>
+                  <span class="icon like-icon mb-2 mb-md-0" onclick="toggleLike(this)"><i class="bi bi-heart-fill"></i> 10 likes</span>
+                  <span class="icon reply-icon mb-2 mb-md-0" onclick="toggleReplyForm(this)"><i class="bi bi-chat-fill"></i> 5 replies</span>
+                  <span class="icon share-icon mb-2 mb-md-0" onclick="openSharePopup()"><i class="bi bi-arrow-repeat"></i> Share</span>
+                </div>
+                <div class="reply-form" style="display: none;">
+                  <form class="reply-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <textarea class="form-control" name="reply" placeholder="Write a reply..." rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary rounded">Reply</button>
+                  </form>
+                </div>
+              </div>
+              
+              
+              
+            </div>
+          </div>
+          
+        </div>
+        
+        <script>
+          function toggleLike(likeIcon) {
+            likeIcon.classList.toggle('liked');
+          }
+        
+          function toggleReplyForm(replyIcon) {
+            const replyForm = replyIcon.parentNode.nextElementSibling;
+            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+          }
+        
+          function openSharePopup() {
+            // Implement the logic to open the share popup here
+          }
+        </script>
+        
+        <style>
+          .icon.like-icon {
+            cursor: pointer;
+          }
+        
+          .icon.like-icon.liked {
+            color: #e0245e;
+          }
+        </style>
+        
+
+
+
+    </div>
+
+
+
+    <div class="sidebar" style="background-color: #f5f8fa; padding: 20px; width: 100%; max-width: 200px;">
+      <!-- User Profile -->
+      <div class="user-profile">
+        <img src="{% static 'img/img.jpg' %}" alt="Profile Image" style="width: 50px; height: 50px; border-radius: 50%;">
+        <h4 class="username" style="font-size: 18px; font-weight: bold;">John Doe</h4>
+        <p class="bio" style="font-size: 14px; color: #777;">Software Engineer | Blogger</p>
+      </div>
+      
+      <!-- Trending Hashtags -->
+      <div class="trending-hashtags">
+        <h5 style="font-size: 16px; font-weight: bold;">Trending Hashtags</h5>
+        <ul class="hashtag-list" style="list-style: none; padding: 0; margin: 10px 0;">
+          <li>
+            <span class="hashtag"> #hashtag1</span>
+            <span class="tweet-count">10K Tweets</span>
+          </li>
+          <li>
+            <span class="hashtag"> #hashtag2</span>
+            <span class="tweet-count">5K Tweets</span>
+          </li>
+          <!-- Add more trending hashtags -->
+        </ul>
+      </div>
+      
+      <!-- Recent Activity -->
+      <div class="recent-activity">
+        <h5 style="font-size: 16px; font-weight: bold;">Recent Activity</h5>
+        <ul class="activity-feed" style="list-style: none; padding: 0; margin: 10px 0;">
+          <li>
+            <img src="{% static 'img/img.jpg' %}" alt="Activity" style="width: 40px; height: 40px; border-radius: 50%;">
+            <span class="activity-description" style="font-size: 14px;">John Doe liked your post.</span>
+          </li>
+          <li>
+            <img src="{% static 'img/img.jpg' %}" alt="Activity" style="width: 40px; height: 40px; border-radius: 50%;">
+            <span class="activity-description" style="font-size: 14px;">Jane Smith followed you.</span>
+          </li>
+          <!-- Add more recent activity items -->
+        </ul>
+      </div>
+      
+      <!-- Social Media Links -->
+      <div class="social-media-links">
+        <h5 style="font-size: 16px; font-weight: bold;">Connect with Me</h5>
+        <ul class="link-list" style="list-style: none; padding: 0; margin: 10px 0;">
+          <li><a href="#" class="social-link">Twitter</a></li>
+          <li><a href="#" class="social-link">Instagram</a></li>
+          <!-- Add more social media links -->
+        </ul>
+      </div>
+    </div>
+    
+    
+    
+  </div>
 </div>
 
-<div class="container" style="display: flex; justify-content: space-between; margin: 20px auto; max-width: 1200px;">
-    <div class="sidebar" style="background-color: #f5f8fa; padding: 20px; width: 200px;">
-        <h2 style="font-size: 28px;">Trending Discussions</h2>
-        <ul class="discussion-list" style="list-style: none; padding: 0; margin: 0;">
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <a href="#" style="text-decoration: none; color: #1da1f2; font-weight: bold; font-size: 18px;">Discussion 4</a>
-                <p style="font-size: 16px; color: #333; margin-top: 5px;">90 views</p>
-            </li>
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <a href="#" style="text-decoration: none; color: #1da1f2; font-weight: bold; font-size: 18px;">Discussion 5</a>
-                <p style="font-size: 16px; color: #333; margin-top: 5px;">70 views</p>
-            </li>
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <a href="#" style="text-decoration: none; color: #1da1f2; font-weight: bold; font-size: 18px;">Discussion 6</a>
-                <p style="font-size: 16px; color: #333; margin-top: 5px;">50 views</p>
-            </li>
-        </ul>
-    </div>
-
-    <div class="content" style="background-color: #fff; padding: 20px; flex-grow: 1;">
-        <h2 style="font-size: 28px;">Post List</h2>
-        <ul class="post-list" style="list-style: none; padding: 0; margin: 0;">
-            <li style="border-bottom: 1px solid #eee; padding: 20px 0;">
-                <h3 style="font-size: 20px; font-weight: bold; color: #1da1f2;">Post Title 1</h3>
-                <p style="font-size: 16px; color: #333; margin-top: 10px;">Post content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div class="post-meta" style="margin-top: 20px;">
-                    <span style="display: inline-block; margin-right: 20px;">
-                        <span class="icon like-icon" style="color: #e0245e;"><i class="bi bi-heart-fill"></i></span> 10 likes
-                    </span>
-                    <span style="display: inline-block; margin-right: 20px;">
-                        <span class="icon view-icon" style="color: #1c9ceb;"><i class="bi bi-eye-fill"></i></span> 100 views
-                    </span>
-                    <span style="display: inline-block;">
-                        <span class="icon reply-icon" style="color: #17bf63;"><i class="bi bi-chat-fill"></i></span> 5 replies
-                    </span>
-                </div>
-            </li>
-            <li style="border-bottom: 1px solid #eee; padding: 20px 0;">
-                <h3 style="font-size: 20px; font-weight: bold; color: #1da1f2;">Post Title 2</h3>
-                <p style="font-size: 16px; color: #333; margin-top: 10px;">Post content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <div class="post-meta" style="margin-top: 20px;">
-                    <span style="display: inline-block; margin-right: 20px;">
-                        <span class="icon like-icon" style="color: #e0245e;"><i class="bi bi-heart-fill"></i></span> 8 likes
-                    </span>
-                    <span style="display: inline-block; margin-right: 20px;">
-                        <span class="icon view-icon" style="color: #1c9ceb;"><i class="bi bi-eye-fill"></i></span> 80 views
-                    </span>
-                    <span style="display: inline-block;">
-                        <span class="icon reply-icon" style="color: #17bf63;"><i class="bi bi-chat-fill"></i></span> 3 replies
-                    </span>
-                </div>
-            </li>
-        </ul>
-    </div>
-
-    <div class="sidebar" style="background-color: #f5f8fa; padding: 20px; width: 200px;">
-        <h2 style="font-size: 28px;">Trending Discussions</h2>
-        <ul class="discussion-list" style="list-style: none; padding: 0; margin: 0;">
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <a href="#" style="font-size: 18px; color: #1da1f2; text-decoration: none;">Discussion 4</a>
-                <p style="font-size: 16px; color: #333; margin-top: 5px;">90 views</p>
-            </li>
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <a href="#" style="font-size: 18px; color: #1da1f2; text-decoration: none;">Discussion 5</a>
-                <p style="font-size: 16px; color: #333; margin-top: 5px;">70 views</p>
-            </li>
-            <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <a href="#" style="font-size: 18px; color: #1da1f2; text-decoration: none;">Discussion 6</a>
-                <p style="font-size: 16px; color: #333; margin-top: 5px;">50 views</p>
-            </li>
-        </ul>
-    </div>
 
 </div>
 

@@ -1,10 +1,15 @@
 from django.urls import path
-from .views import DashboardView, HomeView, Detail
+from . import views
 
 app_name = 'learnsync_app'
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
-    path('dashboard/', DashboardView.as_view(), name='user_dashboard'),
-    path('detailview/', Detail.as_view(), name='detailview')
-]
+    path('', views.IndexView.as_view(), name='index'),
+    path('search/', views.SearchView.as_view(), name='search_results'),
+    path('search_suggestions/', views.search_suggestions, name='search_suggestions'),
+    path('dashboard/', views.DashboardView.as_view(), name='user_dashboard'),
+    # Combined View URL (Detail View and Download Paper)
+    path('paper/<slug:slug>/', views.CombinedView.as_view(), name='paper_detail'),
+
+
+    ]

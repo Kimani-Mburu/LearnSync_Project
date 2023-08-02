@@ -57,7 +57,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-LOGIN_REDIRECT_URL = 'learnsync_app:home'  # Redirect URL after successful login
+LOGIN_REDIRECT_URL = 'learnsync_app:index'  # Redirect URL after successful login
 ACCOUNT_LOGOUT_REDIRECT_URL = 'login'  # Redirect URL after logout
 
 # Email Configuration

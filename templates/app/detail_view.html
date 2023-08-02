@@ -1,6 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
+
 {% block extra_stylesheets %}
+  <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+  <!-- For PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+
+<!-- For Microsoft Office Viewer -->
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/Office.js"></script>
+<style>
+  #pdfViewerContainer {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
+      max-height: 600px; /* Adjust the maximum height as needed */
+      overflow: hidden;
+  }
+
+  #pdfViewer {
+      width: 100%;
+      height: 100%;
+  }
+</style>
 
 {% endblock %}
 {% block main %}
@@ -8,298 +31,346 @@
 <div style="max-width: 100%; padding: 20px;">
   
   <div style="border: 2px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-      <div style="flex-basis: 70%; margin-bottom: 20px;">
-        <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 10px;">Paper Title</h1>
-        <p style="font-size: 18px; color: #666; margin-bottom: 20px;">Author: John Doe</p>
-        <div style="display: flex; align-items: center; color: #777;">
-          <i class="bi bi-journal-check" style="font-size: 18px; margin-right: 5px;"></i>
-          <p style="font-size: 14px; margin-bottom: 0; font-weight: bold;">Citations:</p>
-          <p style="font-size: 14px; margin: 0 5px;">10</p>
-          <i class="bi bi-eye-fill" style="font-size: 18px; margin-right: 5px;"></i>
-          <p style="font-size: 14px; margin-bottom: 0; font-weight: bold;">Full Text Views:</p>
-          <p style="font-size: 14px; margin: 0 5px;">100</p>
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+      <div class="row">
+        <!-- First Section -->
+        <div class="col-md-6 mb-3">
+          <div class="bg-white p-3 rounded shadow">
+            <h1 class="font-weight-bold mb-3">{{ object.title }}</h1>
+            <p class="font-size-16 mb-3">Author: {{ object.authors.all|join:", " }}</p>
+            <div class="d-flex align-items-center text-muted">
+              <i class="bi bi-journal-check font-size-18 mr-1"></i>
+              <p class="font-weight-bold mb-0 mr-4">Citations: 10</p>
+              <i class="bi bi-eye-fill font-size-18 mr-1"></i>
+              <p class="font-weight-bold mb-0">Full Text Views: 100</p>
+            </div>
+            <div class="mt-3 d-md-flex flex-md-row flex-column justify-content-md-between">
+              {% if object.file|has_extension:'.pdf' %}
+                  <a href="{{ object.file.url }}" class="btn btn-primary mb-3 mb-md-0" target="_blank">View PDF</a>
+              {% else %}
+                  <form action="{% url 'learnsync_app:paper_detail' slug=object.slug %}" method="post" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary mb-3 mb-md-0">Download</button>
+                  </form>
+              {% endif %}
+
+              <button class="btn btn-primary mb-3 mb-md-0" onclick="toggleCitation()" data-bs-toggle="modal" data-bs-target="#citationModal">Toggle Citation</button>
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Share 
+                  <i class="bi bi-share"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#"><i class="bi bi-envelope-fill mr-1"></i>Email</a>
+                  <a class="dropdown-item" href="#"><i class="bi bi-twitter mr-1"></i>Twitter</a>
+                  <a class="dropdown-item" href="#"><i class="bi bi-facebook mr-1"></i>Facebook</a>
+                  <a class="dropdown-item" href="#"><i class="bi bi-linkedin mr-1"></i>LinkedIn</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+    
+        <!-- Second Section -->
+        <div class="col-md-6">
+          <div class="bg-white p-3 rounded shadow">
+            <p class="font-size-16 mb-3">Category: {{ object.category }}</p>
+            <p class="font-size-16 mb-3">Publication Date: {{ object.publication_date }}</p>
+            <div class="mb-3">
+              <span class="font-size-16">Tags:</span>
+              {% for tag in object.tags.all %}
+                <a href="#" class="badge bg-primary text-white mx-1">{{ tag }}</a>
+              {% endfor %}
+            </div>
+              <p class="font-size-16 mb-0">
+              <span class="font-italic font-weight-bold">Keywords:</span>
+              <a href="#" class="badge bg-secondary text-white mx-1">Keyword1</a>
+              <a href="#" class="badge bg-secondary text-white mx-1">Keyword2</a>
+              <a href="#" class="badge bg-secondary text-white mx-1">Keyword3</a>
+            </p>
+          </div>
+          
         </div>
       </div>
-      
-      <div style="flex-basis: 30%; display: flex; justify-content: flex-end; align-items: center;">
-        <a href="#" style="margin-right: 10px;" class="btn btn-primary">Download</a>
-        <button onclick="toggleCitation()" style="margin-right: 10px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#citationModal">Toggle Citation</button>
-        <button style="padding: 8px 16px; background-color: #007bff; color: #fff; border: none; border-radius: 4px; font-size: 14px;" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></button>
-        <ul class="dropdown-menu">
-          <li class="dropdown-header">Share</li>
-          <li><a class="dropdown-item" href="#"><i class="bi bi-envelope-fill" style="margin-right: 5px;"></i>Email</a></li>
-          <li><a class="dropdown-item" href="#"><i class="bi bi-twitter" style="margin-right: 5px;"></i>Twitter</a></li>
-          <li><a class="dropdown-item" href="#"><i class="bi bi-facebook" style="margin-right: 5px;"></i>Facebook</a></li>
-          <li><a class="dropdown-item" href="#"><i class="bi bi-linkedin" style="margin-right: 5px;"></i>LinkedIn</a></li>
-        </ul>      </div>
     </div>
+    
   </div>
   
   <!-- Modal -->
-  <div class="modal fade" id="citationModal" tabindex="-1" aria-labelledby="citationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="citationModalLabel">Citation Text</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Add tab navigation -->
-          <ul class="nav nav-tabs" id="citationTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="plainTextTab" data-bs-toggle="tab" data-bs-target="#plainText" type="button" role="tab" aria-controls="plainText" aria-selected="true">Plain Text</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="bibtexTab" data-bs-toggle="tab" data-bs-target="#bibtex" type="button" role="tab" aria-controls="bibtex" aria-selected="false">BibTeX</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="risTab" data-bs-toggle="tab" data-bs-target="#ris" type="button" role="tab" aria-controls="ris" aria-selected="false">RIS</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="refworksTab" data-bs-toggle="tab" data-bs-target="#refworks" type="button" role="tab" aria-controls="refworks" aria-selected="false">RefWorks</button>
-            </li>
-          </ul>
-  
-          <!-- Add tab content -->
-          <div class="tab-content mt-3" id="citationTabContent">
-            <div class="tab-pane fade show active border rounded-lg p-3" id="plainText" role="tabpanel" aria-labelledby="plainTextTab">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec nunc nibh. Morbi bibendum nisi a fringilla tincidunt.</p>
+      <div class="modal fade" id="citationModal" tabindex="-1" aria-labelledby="citationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="citationModalLabel">Citation Text</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="tab-pane fade border rounded-lg p-3" id="bibtex" role="tabpanel" aria-labelledby="bibtexTab">
-              <p>BibTeX citation text goes here.</p>
+            <div class="modal-body">
+              <!-- Add tab navigation -->
+              <ul class="nav nav-tabs" id="citationTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="plainTextTab" data-bs-toggle="tab" data-bs-target="#plainText" type="button" role="tab" aria-controls="plainText" aria-selected="true">Plain Text</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="bibtexTab" data-bs-toggle="tab" data-bs-target="#bibtex" type="button" role="tab" aria-controls="bibtex" aria-selected="false">BibTeX</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="risTab" data-bs-toggle="tab" data-bs-target="#ris" type="button" role="tab" aria-controls="ris" aria-selected="false">RIS</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="refworksTab" data-bs-toggle="tab" data-bs-target="#refworks" type="button" role="tab" aria-controls="refworks" aria-selected="false">RefWorks</button>
+                </li>
+              </ul>
+      
+              <!-- Add tab content -->
+              /
             </div>
-            <div class="tab-pane fade border rounded-lg p-3" id="ris" role="tabpanel" aria-labelledby="risTab">
-              <p>RIS citation text goes here.</p>
-            </div>
-            <div class="tab-pane fade border rounded-lg p-3" id="refworks" role="tabpanel" aria-labelledby="refworksTab">
-              <p>RefWorks citation text goes here.</p>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="copyToClipboardBtn">Copy to Clipboard</button>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="copyToClipboardBtn">Copy to Clipboard</button>
         </div>
       </div>
-    </div>
-  </div>
-  
-    <div class="row">
-    <div class="col-md-3">
-      <aside style="background-color: #f5f8fa; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-        <ul style="list-style: none; padding: 0; margin: 0;">
-          <li>
-            <a href="#section1" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Abstract</a>
-          </li>
-          <li>
-            <a href="#section2" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Preview</a>
-          </li>
-          <li>
-            <a href="#section3" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Author (s')</a>
-          </li>
-          <li>
-            <a href="#section4" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">References</a>
-          </li>
-        </ul>
-      </aside>
       
-    
-      
-    </div>
-    
-    <div class="col-md-6">
-      <div style="background-color: #f9f9f9; border-radius: 10px; padding: 10px; margin-bottom: 20px;">
-        <div class="accordion" id="accordionSections">
-          <div class="accordion-item" id="section1">
-            <h2 class="accordion-header" id="section1Header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#section1Collapse" aria-expanded="true" aria-controls="section1Collapse">
-                Abstract
-              </button>
-            </h2>
-            <div id="section1Collapse" class="accordion-collapse collapse show" aria-labelledby="section1Header" data-bs-parent="#accordionSections">
-              <div class="accordion-body">
-                <div style="background-color: #f5f8fa; border-radius: 10px; padding: 5px;">
-                  <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Abstract</h2>
-                  <div style="background-color: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
-                    <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Abstract:</h3>
-                    <p style="font-size: 16px; margin-bottom: 10px;">Introduced the Android platform and the features of Android applications, gave a detailed description of Android application framework from the prospective of developers. A simple music player is provided as an instance to illustrate the basic working processes of Android application components. This paper could provide guidance to understanding the operation mechanism of Android applications and to developing applications on the Android platform.</p>
-                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>Published in:</strong> 2011 4th International Conference on Intelligent Networks and Intelligent Systems</p>
-                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>Date of Conference:</strong> 01-03 November 2011</p>
-                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>Date Added to LearnSync:</strong> 15 December 2011</p>
-                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>ISBN Information:</strong> INSPEC Accession Number: 12440558</p>
-                    <p style="font-size: 14px; margin-bottom: 5px;"><strong>DOI:</strong> 10.1109/ICINIS.2011.40</p>
-                    <p style="font-size: 14px; margin-bottom: 0;"><strong>Publisher:</strong> LearnSync</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div class="row">
+        <div class="col-md-3">
+          <aside style="background-color: #f5f8fa; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li>
+                <a href="#section1" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Abstract</a>
+              </li>
+              <li>
+                <a href="#section2" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Preview</a>
+              </li>
+              <li>
+                <a href="#section3" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">Author (s')</a>
+              </li>
+              <li>
+                <a href="#section4" style="font-size: 18px; color: #003e7e; text-decoration: none; display: block; margin-bottom: 5px; padding: 10px; border-radius: 5px; background-color: #fff; border: 1px solid #ccc;">References</a>
+              </li>
+            </ul>
+          </aside>
           
-          <div class="accordion-item" id="section2">
-            <h2 class="accordion-header" id="section2Header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section2Collapse" aria-expanded="false" aria-controls="section2Collapse">
-                Preview
-              </button>
-            </h2>
-            <div id="section2Collapse" class="accordion-collapse collapse" aria-labelledby="section2Header" data-bs-parent="#accordionSections">
-              <div class="accordion-body">
-                <div style="background-color: #f5f8fa; border-radius: 10px; padding: 5px;">
-                  <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Preview</h2>
-                  <div style="background-color: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
-                    <div style="position: relative;">
-                      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <button class="btn btn-primary">Sign In to Access Full Document</button>
-                      </div>
-                      <embed src="https://journals.sagepub.com/doi/full/10.1177/1534484320903890" type="application/pdf" style="width: 100%; height: 400px;">
-                    </div>
-                  </div>
-                </div>
-                
-              </div>
-              
-            </div>
-          </div>
+        
           
-          <div class="accordion-item" id="section3">
-            <h2 class="accordion-header" id="section3Header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section3Collapse" aria-expanded="false" aria-controls="section3Collapse">
-                Author(s')
-              </button>
-            </h2>
-            <div id="section3Collapse" class="accordion-collapse collapse" aria-labelledby="section3Header" data-bs-parent="#accordionSections">
-              <div class="accordion-body" role="tabpanel" id="authors" aria-labelledby="authors-header">
-                <div class="authors-accordion-container">
-                  <div class="author-card text-base-md-lh">
-                    <div class="row g-0">
-                      <div class="col-24-24">
-                        <div>
-                          <a href="/author/38240052100">
-                            <span>Jianye Liu</span>
-                          </a>
-                        </div>
-                        <div>
-                          School of Information, Yunnan University of Finance and Economics, KunMing, China
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="authors-accordion-container">
-                  <div class="author-card text-base-md-lh">
-                    <div class="row g-0">
-                      <div class="col-24-24">
-                        <div>
-                          <a href="/author/37597024300">
-                            <span>Jiankun Yu</span>
-                          </a>
-                        </div>
-                        <div>
-                          School of Information, Yunnan University of Finance and Economics, KunMing, China
-                        </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div style="background-color: #f9f9f9; border-radius: 10px; padding: 10px; margin-bottom: 20px;">
+            <div class="accordion" id="accordionSections">
+              <div class="accordion-item" id="section1">
+                <h2 class="accordion-header" id="section1Header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#section1Collapse" aria-expanded="true" aria-controls="section1Collapse">
+                    Abstract
+                  </button>
+                </h2>
+                <div id="section1Collapse" class="accordion-collapse collapse show" aria-labelledby="section1Header" data-bs-parent="#accordionSections">
+                  <div class="accordion-body">
+                    <div style="background-color: #f5f8fa; border-radius: 10px; padding: 5px;">
+                      <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Abstract</h2>
+                      <div style="background-color: #fff; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                        <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Abstract:</h3>
+                        <p style="font-size: 16px; margin-bottom: 10px;">{{ object.abstract }}</p>
+                        <p style="font-size: 14px; margin-bottom: 5px;"><strong>Published in:</strong>{{ object.publication_date }}</p>
+                        <p style="font-size: 14px; margin-bottom: 5px;"><strong>Date Added to LearnSync:</strong> {{ object.publication_date }}</p>
+                        <p style="font-size: 14px; margin-bottom: 0;"><strong>Publisher:</strong> {{ object.tags.all|join:", " }}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               
-            </div>
-          </div>
-          
-          <div class="accordion-item" id="section4">
-            <h2 class="accordion-header" id="section4Header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section4Collapse" aria-expanded="false" aria-controls="section4Collapse">
-                References
-              </button>
-            </h2>
-            <div id="section4Collapse" class="accordion-collapse collapse" aria-labelledby="section4Header" data-bs-parent="#accordionSections">
-              <div class="accordion-body">
-                <div class="accordion-body collapse show" id="references" aria-labelledby="references-header">
-                  <section id="references-anchor" class="document-all-references text-base-md-lh">
-                    <div class="u-mb-1 reference-header-container">
-                      <span class="citation-map-button">
-                        <a class="citation-map-button">References &amp; Cited By</a>
-                      </span>
+              <div class="accordion-item" id="section2">
+                <h2 class="accordion-header" id="section2Header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section2Collapse" aria-expanded="false" aria-controls="section2Collapse">
+                    Preview
+                  </button>
+                </h2>
+                <div id="section2Collapse" class="accordion-collapse collapse" aria-labelledby="section2Header" data-bs-parent="#accordionSections">
+                  <div class="accordion-body">
+                    <div style="background-color: #f5f8fa; border-radius: 10px; padding: 5px;">
+                        <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Preview</h2>
+                        <div id="pdfViewerContainer">
+                            {% if user.is_authenticated %}
+                                {% if object.file|has_extension:'.pdf' %}
+                                    <div id="pdfViewer"></div>
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+                                    <script>
+                                        function displayPDF() {
+                                            const pdfFile = "{{ object.file.url }}";
+                                            const pdfViewerContainer = document.getElementById("pdfViewerContainer");
+                                            const pdfViewer = document.getElementById("pdfViewer");
+                        
+                                            pdfjsLib.getDocument(pdfFile).promise.then(function(pdfDoc) {
+                                                pdfDoc.getPage(1).then(function(page) {
+                                                    const viewport = page.getViewport({ scale: 1 });
+                                                    const canvas = document.createElement("canvas");
+                                                    const context = canvas.getContext("2d");
+                                                    canvas.height = viewport.height;
+                                                    canvas.width = viewport.width;
+                        
+                                                    const renderContext = {
+                                                        canvasContext: context,
+                                                        viewport: viewport,
+                                                    };
+                                                    page.render(renderContext).promise.then(function() {
+                                                        pdfViewer.appendChild(canvas);
+                                                    });
+                                                });
+                                            });
+                                        }
+                        
+                                        displayPDF();
+                                    </script>
+                                {% elif object.file|has_extension:'.docx' %}
+                                    <iframe src="https://view.officeapps.live.com/op/embed.aspx?src={{ object.file.url }}" width="100%" height="600px" style="border: none;"></iframe>
+                                {% else %}
+                                    <!-- For other file formats, show a download link -->
+                                    <div style="width: 100%; height: 400px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                                        <a href="{% url 'learnsync_app:download-paper' object.id %}" class="btn btn-primary">Download</a>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div style="position: relative;">
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                        <a href="{% url 'account_login' %}" class="btn btn-primary">Sign In to Access Full Document</a>
+                                    </div>
+                                    <!-- Add a placeholder for the document preview, or any other message you want to display -->
+                                    <div style="width: 100%; height: 400px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                                        Preview not available. Sign in to access the full document.
+                                    </div>
+                                </div>
+                            {% endif %}                  
+                        </div>
                     </div>
-                    <div id="references-section-container" class="document-ft-section-container">
-                      <div tabindex="0" class="hide-mobile u-mb-1">
-                        <input type="checkbox" class="u-mr-1 ng-untouched ng-pristine ng-valid">
-                        <span>Select All</span>
-                      </div>
-                      <div>
-                        <div class="reference-container" style="border-bottom: 1px solid #ccc;">
-                          <div class="d-flex u-overflow-wrap-break-word">
-                            <div class="hide-mobile u-pr-2"></div>
-                            <div class="number"><b>1.</b></div>
-                            <div class="col u-px-1">
-                              <div>OL. Google Android Developers, Android Develop Guide, http://developer.android.com/guide/topics/fundamentals.html</div>
-                              <div class="ref-links-container stats-reference-links-container">
-                                <span class="ref-link">
-                                  <a class="stats-reference-link-showContext">
-                                    <i class="icon-caret-abstract"></i>
-                                    <span>Show in Context</span>
-                                  </a>
-                                </span>
-                                <span class="ref-link">
-                                  <a target="_blank" class="stats-reference-link-googleScholar" href="https://scholar.google.com/scholar?as_q=Android+Develop+Guide&amp;as_occt=title&amp;hl=en&amp;as_sdt=0%2C31">
-                                    Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
-                                  </a>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="reference-container" style="border-bottom: 1px solid #ccc;">
-                          <div class="d-flex u-overflow-wrap-break-word">
-                            <div class="hide-mobile u-pr-2"></div>
-                            <div class="number"><b>2.</b></div>
-                            <div class="col u-px-1">
-                              <div>M. Fengsheng Yang, Android Application Development Revelation, China Machine Press, 2010, 1</div>
-                              <div class="ref-links-container stats-reference-links-container">
-                                <span class="ref-link">
-                                  <a target="_blank" class="stats-reference-link-googleScholar" href="https://scholar.google.com/scholar?as_q=Android+Application+Development+Revelation&amp;as_occt=title&amp;hl=en&amp;as_sdt=0%2C31">
-                                    Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
-                                  </a>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="reference-container" style="border-bottom: 1px solid #ccc;">
-                          <div class="d-flex u-overflow-wrap-break-word">
-                            <div class="hide-mobile u-pr-2"></div>
-                            <div class="number"><b>3.</b></div>
-                            <div class="col u-px-1">
-                              <div>M. Zhengguo Hu, Jian Wu, Zhenggong Deng, Programming Methodology, National Defence Industry Press, 2008, 6</div>
-                              <div class="ref-links-container stats-reference-links-container">
-                                <span class="ref-link">
-                                  <a target="_blank" class="stats-reference-link-googleScholar" href="https://scholar.google.com/scholar?as_q=Programming+Methodology&amp;as_occt=title&amp;hl=en&amp;as_sdt=0%2C31">
-                                    Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
-                                  </a>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+                </div>
                 </div>
                 
+                
               </div>
+              
+              <div class="accordion-item" id="section3">
+                <h2 class="accordion-header" id="section3Header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section3Collapse" aria-expanded="false" aria-controls="section3Collapse">
+                    Author(s')
+                  </button>
+                </h2>
+                <div id="section3Collapse" class="accordion-collapse collapse" aria-labelledby="section3Header" data-bs-parent="#accordionSections">
+                  <div class="accordion-body" role="tabpanel" id="authors" aria-labelledby="authors-header">
+                    {% for author in object.authors.all %}
+                    <div class="authors-accordion-container">
+                      <div class="author-card text-base-md-lh">
+                        <div class="row g-0">
+                          <div class="col-24-24">
+                              <div>
+                                <a href="#">
+                                  <span>{{ author.full_name }}</span>
+                                </a>
+                              </div>
+                              <div>
+                                {{ author.affiliation }}
+                              </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+
+                        
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              
+              <div class="accordion-item" id="section4">
+                <h2 class="accordion-header" id="section4Header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#section4Collapse" aria-expanded="false" aria-controls="section4Collapse">
+                    References
+                  </button>
+                </h2>
+                  <div id="section4Collapse" class="accordion-collapse collapse" aria-labelledby="section4Header" data-bs-parent="#accordionSections">
+                    <div class="accordion-body">
+                      <div class="accordion-body collapse show" id="references" aria-labelledby="references-header">
+                          <section id="references-anchor" class="document-all-references text-base-md-lh">
+                              <div class="u-mb-1 reference-header-container">
+                                  <span class="citation-map-button">
+                                      <a class="citation-map-button">References &amp; Cited By</a>
+                                  </span>
+                              </div>
+                              <div id="references-section-container" class="document-ft-section-container">
+                                  {% for reference in object.references.all %}
+                                      <div class="reference-container" style="border-bottom: 1px solid #ccc;">
+                                          <div class="d-flex u-overflow-wrap-break-word">
+                                              <div class="hide-mobile u-pr-2"></div>
+                                              <div class="number"><b>{{ forloop.counter }}.</b></div>
+                                              <div class="col u-px-1">
+                                                  <div>{{ reference.content }}</div>
+                                                  <div class="ref-links-container stats-reference-links-container">
+                                                      {% comment %} <span class="ref-link">
+                                                          <a target="_blank" class="stats-reference-link-googleScholar" href="{{ reference.link }}">
+                                                              Google Scholar <i class="fas fa-external-link-alt fa-sm"></i>
+                                                          </a>
+                                                      </span> {% endcomment %}
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  {% endfor %}
+                              </div>
+                          </section>
+                      </div>
+                  </div>
+                </div>
+              </div> 
+
             </div>
           </div>
-          
-          
         </div>
+                
+        <div class="col-md-3">
+          <aside class="bg-light rounded p-3 mb-4">
+            <h3 class="mb-4">Similar Papers</h3>
+            <form class="mb-3" action="#" style="position: relative;">
+              <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search similar papers">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+              </div>
+            </form>
+            <ul class="list-unstyled">
+              {% for similar_paper in related_papers %}
+              <li class="mb-3 border p-3">
+                <a href="{{ similar_paper.get_absolute_url }}" class="text-decoration-none">
+                  <h4 class="fw-bold text-primary">{{ similar_paper.title }}</h4>
+                </a>
+                <hr class="my-2">
+                <p class="text-muted small">{{ similar_paper.abstract|truncatewords:20 }}</p>
+                <hr class="my-2">
+                <div class="d-flex align-items-center">
+                  <p class="mb-0 me-3">
+                    <i class="bi bi-eye text-muted me-1"></i>
+                    <span class="text-muted">Views: </span> {{ similar_paper.views }}
+                  </p>
+                  <a href="{{ similar_paper.get_absolute_url }}" class="btn btn-sm btn-primary">Read More</a>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </aside>
+        
+          <style>
+            @media (max-width: 576px) {
+              .similar-papers {
+                flex-direction: column;
+              }
+        
+              .search-bar {
+                width: 100%;
+              }
+            }
+          </style>
+        </div>
+
       </div>
-    </div>
-            
-    <div class="col-md-3">
-      <aside style="background-color: #f5f8fa; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-        <p>Right Sidebar Content</p>
-      </aside>
-    </div>
-  </div>
+  
 </div>
 
 
@@ -322,5 +393,6 @@
       });
   });
 </script>
+
 
 {% endblock  %}
