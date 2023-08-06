@@ -77,7 +77,9 @@
             <button type="submit" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background-color: transparent; border: none;">
                 <i class="bi bi-search" style="font-size: 24px; color: #007bff;"></i>
             </button>
-            <div id="search-suggestions-container" style="display: none;"></div>
+            <div id="search-suggestions-container" class="dropdown-menu" aria-labelledby="search-input" style="display: none; position: absolute; width: 100%; max-height: 200px; overflow-y: auto; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 10px;">
+                <!-- Suggestions will be displayed here -->
+            </div>
         </form>
 
         
@@ -540,53 +542,46 @@
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
     // Function to fetch and display search suggestions
     function fetchSuggestions(query) {
-        $.ajax({
-            url: "{% url 'learnsync_app:search_suggestions' %}",
-            data: { query: query },
-            dataType: 'json',
-            success: function(data) {
-                // Build and display the suggestions pop-up
-                var suggestionsContainer = $('#search-suggestions-container');
-                suggestionsContainer.empty();
-                if (data.length > 0) {
-                    for (var i = 0; i < data.length; i++) {
-                        var suggestion = data[i].title;
-                        var suggestionItem = $('<div class="suggestion-item">' + suggestion + '</div>');
-                        suggestionsContainer.append(suggestionItem);
-                    }
-                    suggestionsContainer.show();
+        const url = "{% url 'learnsync_app:search_suggestions' %}?query=" + encodeURIComponent(query);
+
+        $.getJSON(url)
+            .done(function (suggestions) {
+                const container = $("#search-suggestions-container");
+                container.empty(); // Clear existing suggestions
+
+                if (suggestions.length > 0) {
+                    $.each(suggestions, function (index, suggestion) {
+                        const link = $("<a>", {
+                            href: suggestion.url,
+                            text: suggestion.title,
+                            class: "dropdown-item" // Add Bootstrap class for styling
+                        });
+
+                        container.append(link);
+                    });
+
+                    container.show(); // Show the suggestions container
                 } else {
-                    suggestionsContainer.hide();
+                    container.hide(); // Hide the suggestions container if no suggestions
                 }
-            },
-            error: function(error) {
-                console.log('Error fetching search suggestions:', error);
-            }
-        });
+            })
+            .fail(function (error) {
+                console.error("Error fetching search suggestions:", error);
+            });
     }
 
-    // Handle user input in the search box
-    $('#search-input').on('input', function() {
-        var query = $(this).val().trim();
+    // Add event listener for input changes
+    $("#search-input").on("input", function (event) {
+        const query = $(this).val().trim();
         if (query.length > 0) {
             fetchSuggestions(query);
         } else {
-            $('#search-suggestions-container').hide();
+            $("#search-suggestions-container").hide(); // Hide the suggestions container if input is empty
         }
     });
-
-    // Handle clicks outside the suggestions pop-up to hide it
-    $(document).on('click', function(event) {
-        if (!$(event.target).closest('#search-suggestions-container').length) {
-            $('#search-suggestions-container').hide();
-        }
-    });
-});
 </script>
-
     
 {% endblock %}
 

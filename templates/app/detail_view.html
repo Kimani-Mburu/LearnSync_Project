@@ -42,7 +42,7 @@
               <i class="bi bi-journal-check font-size-18 mr-1"></i>
               <p class="font-weight-bold mb-0 mr-4">Citations: 10</p>
               <i class="bi bi-eye-fill font-size-18 mr-1"></i>
-              <p class="font-weight-bold mb-0">Full Text Views: 100</p>
+              <p class="font-weight-bold mb-0">Full Text Views: {{object.views}}</p>
             </div>
             <div class="mt-3 d-md-flex flex-md-row flex-column justify-content-md-between">
               {% if object.file|has_extension:'.pdf' %}
@@ -96,7 +96,7 @@
     
   </div>
   
-  <!-- Modal -->
+         <!-- Modal -->
       <div class="modal fade" id="citationModal" tabindex="-1" aria-labelledby="citationModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -121,8 +121,22 @@
                 </li>
               </ul>
       
-              <!-- Add tab content -->
-              /
+            <!-- Add tab content -->
+            <div class="tab-content mt-3" id="citationTabContent">
+              <div class="tab-pane fade show active border rounded-lg p-3" id="plainText" role="tabpanel" aria-labelledby="plainTextTab">
+                <p>{{ object.citation }}</p>
+              </div>
+              <div class="tab-pane fade border rounded-lg p-3" id="bibtex" role="tabpanel" aria-labelledby="bibtexTab">
+                <p>{{ object.bibtex_citation }}</p>
+              </div>
+              <div class="tab-pane fade border rounded-lg p-3" id="ris" role="tabpanel" aria-labelledby="risTab">
+                <p>{{ object.ris_citation }}</p>
+              </div>
+              <div class="tab-pane fade border rounded-lg p-3" id="refworks" role="tabpanel" aria-labelledby="refworksTab">
+                <p>{{ object.refworks_citation }}</p>
+              </div>
+            </div>
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" id="copyToClipboardBtn">Copy to Clipboard</button>
