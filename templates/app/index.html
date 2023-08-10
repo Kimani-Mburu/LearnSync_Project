@@ -108,7 +108,7 @@
             <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Stay up-to-date with cutting-edge research</li>
             <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Find valuable insights and scholarly perspectives</li>
           </ul>
-          <a href="#" style="display: inline-block; padding: 12px 24px; background-color: #fff; color: #007bff; font-size: 20px; font-weight: bold; text-decoration: none; border-radius: 4px;">Get Started</a>
+          <a href="{% url 'subscription:subscription_plan_list' %}" style="display: inline-block; padding: 12px 24px; background-color: #fff; color: #007bff; font-size: 20px; font-weight: bold; text-decoration: none; border-radius: 4px;">Get Started</a>
         </div>
       </section>
       
@@ -179,30 +179,8 @@
     </div>
 </section> {% endcomment %}
 
-<!-- Subscription Plans Section -->
-<section style="background-color: #f2f2f2; padding: 50px; text-align: center;">
-    <h3 style="font-size: 24px; margin-bottom: 20px;">Choose a Subscription Plan</h3>
-    <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-        <div style="width: 300px; margin: 20px; background-color: #fff; border-radius: 4px; padding: 20px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-            <h4 style="font-size: 20px; margin-bottom: 10px;">Basic Plan</h4>
-            <p style="font-size: 16px; margin-bottom: 10px;">Access to limited papers</p>
-            <p style="font-size: 16px; margin-bottom: 10px;">$9.99/month</p>
-            <a href="#" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; font-size: 14px; text-decoration: none; border-radius: 4px;">Get Started</a>
-        </div>
-        <div style="width: 300px; margin: 20px; background-color: #fff; border-radius: 4px; padding: 20px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-            <h4 style="font-size: 20px; margin-bottom: 10px;">Premium Plan</h4>
-            <p style="font-size: 16px; margin-bottom: 10px;">Unlimited access to all papers</p>
-            <p style="font-size: 16px; margin-bottom: 10px;">$19.99/month</p>
-            <a href="#" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; font-size: 14px; text-decoration: none; border-radius: 4px;">Get Started</a>
-        </div>
-        <div style="width: 300px; margin: 20px; background-color: #fff; border-radius: 4px; padding: 20px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
-            <h4 style="font-size: 20px; margin-bottom: 10px;">Enterprise Plan</h4>
-            <p style="font-size: 16px; margin-bottom: 10px;">Customized plan for organizations</p>
-            <p style="font-size: 16px; margin-bottom: 10px;">Contact us for pricing</p>
-            <a href="#" style="display: inline-block; padding: 8px 16px; background-color: #007bff; color: #fff; font-size: 14px; text-decoration: none; border-radius: 4px;">Contact Us</a>
-        </div>
-    </div>
-</section>
+
+
 
 <!-- Featured Thesis Papers Section -->
 {% comment %} <section style="background-color: #fff; padding: 50px; text-align: center;">

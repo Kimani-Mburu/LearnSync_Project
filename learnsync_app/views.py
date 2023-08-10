@@ -91,7 +91,7 @@ class CombinedView(View):
     def get_related_papers(self, paper):
         # Implement the logic to get related papers based on tags and categories
         # For example:
-        related_papers = paper.__class__.objects.filter(tags__in=paper.tags.all()).exclude(pk=paper.pk).distinct()[:3]
+        related_papers = paper.__class__.objects.filter(tags__in=paper.tags.all()).exclude(pk=paper.pk).distinct()[:4]
         return related_papers
 
     def post(self, request, *args, **kwargs):
@@ -108,7 +108,6 @@ class CombinedView(View):
         # Check if the user is authenticated
         if request.user.is_authenticated:
             # Implement additional permission checks here if required
-            # For example, you can check if the user is the owner of the paper or has specific permissions.
 
             try:
                 if os.path.exists(file_path):
@@ -124,7 +123,7 @@ class CombinedView(View):
                 raise Http404("An error occurred while downloading the file.")
         else:
             # Redirect to the login page if the user is not authenticated
-            return redirect(reverse('login'))  # Assuming you have a URL pattern named 'login' for the login view
+            return redirect(reverse('account_login'))  # Assuming you have a URL pattern named 'login' for the login view
     
 class DashboardView(View):
     def get(self, request):

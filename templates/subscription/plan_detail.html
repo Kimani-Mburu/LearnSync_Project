@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_stylesheets %}
+<style>
+    /* Additional styles go here */
+    .subscription-plan-detail {
+        padding: 50px;
+        text-align: center;
+        background-color: #f2f2f2;
+    }
+    .plan-section {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+        position: relative;
+    }
+    .plan-title {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+    .plan-description {
+        font-size: 20px;
+        color: #666;
+        margin-bottom: 30px;
+    }
+    .plan-price {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    .feature-list {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 30px;
+        text-align: center;
+    }
+    .feature-list li {
+        font-size: 20px;
+        margin-bottom: 10px;
+        position: relative;
+        line-height: 1.6;
+    }
+    .feature-list li::before {
+        color: #007bff;
+        position: absolute;
+        left: -25px;
+        font-size: 18px;
+    }
+    .feature-list li:nth-child(odd) {
+        color: #333;
+    }
+    .feature-list li:nth-child(even) {
+        color: #007bff;
+    }
+    .subscribe-button {
+        display: inline-block;
+        padding: 12px 24px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+    .subscribe-button:hover {
+        background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+        .plan-section {
+            padding: 20px;
+        }
+        .plan-title {
+            font-size: 28px;
+        }
+        .plan-description {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .plan-price {
+            font-size: 24px;
+        }
+        .feature-list li {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .subscribe-button {
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+    }
+</style>
+{% endblock extra_stylesheets %}
+
+{% block main %}
+<div class="container subscription-plan-detail">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="plan-section">
+                <h2 class="plan-title">{{ subscription_plan.name }}</h2>
+                <p class="plan-description">{{ subscription_plan.description }}</p>
+                <p class="plan-price">${{ subscription_plan.price }}/month</p>
+                <ul class="feature-list">
+                    {% for feature in subscription_plan.features.all %}
+                    <li>{{ feature.name }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="#" class="subscribe-button">Subscribe</a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="sidebar bg-light p-3 rounded">
+                <h3 class="sidebar-title">Get the Most Out of Your Subscription</h3>
+                <p class="sidebar-content">Explore our premium features and stay ahead with unlimited access to top-quality content. Don't miss out on this opportunity to enhance your learning experience.</p>
+                <a href="#" class="subscribe-button">Upgrade Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <div class="additional-content-section p-4 bg-white rounded">
+                <h3 class="section-title">Additional Information</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit justo nec ante sodales, nec iaculis justo imperdiet.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

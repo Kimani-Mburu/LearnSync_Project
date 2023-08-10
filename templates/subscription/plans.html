@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_stylesheets %}
+<style>
+    /* Additional styles go here */
+    .subscription-card {
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        transition: box-shadow 0.3s, transform 0.3s;
+        cursor: pointer;
+        height: 100%;
+    }
+    .subscription-card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        transform: scale(1.05);
+    }
+    .subscription-card .card-header {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+    .subscription-card .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+    }
+    .subscription-card .card-body p {
+        margin: 0;
+        color: #333; /* Text color */
+    }
+    .subscription-card .feature-list {
+        padding: 0;
+        list-style: none;
+        margin-top: 10px;
+    }
+    .subscription-card .feature-list li {
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .subscription-card .feature-list li:nth-child(odd) {
+        color: black;
+    }
+    .subscription-card .feature-list li:nth-child(even) {
+        color: #007bff;
+    }
+</style>
+{% endblock extra_stylesheets %}
+
+{% block main %}
+<section style="background-color: #f2f2f2; padding: 50px; text-align: center;">
+    <h3 style="font-size: 24px; margin-bottom: 20px;">Choose a Subscription Plan</h3>
+    <div class="row">
+        {% for plan in subscription_plans %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm subscription-card">
+                <div class="card-header">
+                    {{ plan.name }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ plan.description }}</p>
+                    <p class="card-text">${{ plan.price }}/month</p>
+                    <ul class="list-unstyled feature-list">
+                        {% for feature in plan.features.all %}
+                        <li>
+                            <div class="feature-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span class="feature-text">{{ feature.name }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'subscription:subscription_plan_detail' pk=plan.id %}" class="btn btn-primary" style="margin-top: 10px;">Subscribe</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock main %}
