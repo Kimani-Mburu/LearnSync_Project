@@ -1,0 +1,6 @@
+            @media (max-width: 576px) {
+                .user-profile img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }

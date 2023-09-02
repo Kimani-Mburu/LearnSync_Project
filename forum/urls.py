@@ -1,12 +1,13 @@
 from django.urls import path
 from . import views
 
-app_name = 'forum'
-
 urlpatterns = [
-    path('', views.forum, name='forum'),
-    path('category/<int:category_id>/', views.category_detail, name='category_detail'),
-    path('thread/<int:thread_id>/', views.thread_detail, name='thread_detail'),
-    path('category/<int:category_id>/create_thread/', views.create_thread, name='create_thread'),
-    path('thread/<int:thread_id>/reply/', views.reply_to_thread, name='reply_to_thread'),
+    path('', views.ForumView.as_view(), name='forum_two'),
+    path('submit-feedback/', views.UserFeedbackFormView.as_view(), name='submit_feedback'),
+    path('user-conversions/', views.UserConversionView.as_view(), name='user_conversions'),
+    path('search/', views.SearchResultsView.as_view(), name='search_results'),
+    path('analytics/', views.AnalyticsDashboardView.as_view(), name='analytics_dashboard'),
+    path('trending-threads/', views.TrendingThreadsView.as_view(), name='trending_threads'),
+    path('sentiment-analysis/', views.SentimentAnalysisView.as_view(), name='sentiment_analysis'),
+    path('user-churn-analysis/', views.UserChurnAnalysisView.as_view(), name='user_churn_analysis'),
 ]
