@@ -1,65 +1,145 @@
+import logging
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.models import User
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import FormView
+from django.contrib import messages
 import requests
 from .models import Category, Thread, Post, UserActivity, Conversion, UserFeedback
 from .form import ThreadForm, PostForm, UserFeedbackForm, ReplyForm
 from .utils import calculate_user_engagement, calculate_sentiment, calculate_popularity
 from .algorithms import UserActivityAlgorithm, calculate_average_post_length, calculate_sentiment, calculate_popularity, calculate_thread_participation_ratio, identify_inactive_users
 
-class ForumView(View):
-    template_name = 'forum/forum_two.html'
-    posts_per_page = 10
+posts_per_page = 10
 
-    def get(self, request, *args, **kwargs):
-        page = int(request.GET.get('page', 1))
-        start_index = (page - 1) * self.posts_per_page
-        end_index = start_index + self.posts_per_page
 
-        posts = Post.objects.order_by('-created_at')[start_index:end_index]
+def forum_view(request):
+    page = int(request.GET.get('page', 1))
+    start_index = (page - 1) * posts_per_page
+    end_index = start_index + posts_per_page
 
-        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-            posts_data = [
-                {
-                    'id': post.id,
-                    'content': post.content,
-                    'creator': post.creator.username,
-                    'created_at': post.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                }
-                for post in posts
-            ]
-            return JsonResponse({'posts': posts_data})
+    posts = Post.objects.order_by('-created_at')[start_index:end_index]
 
-        threads = Thread.objects.all()
-        categories = Category.objects.all()
-        context = {
-            'posts': posts,
-            'threads': threads,
-            'categories': categories,
-            'create_thread_form': ThreadForm(),
-            'create_post_form': PostForm(),
-        }
-        return render(request, self.template_name, context)
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        posts_data = [
+            {
+                'id': post.id,
+                'content': post.content,
+                'creator': post.creator.username,
+                'created_at': post.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            for post in posts
+        ]
+        return JsonResponse({'posts': posts_data})
 
-    def post(self, request, *args, **kwargs):
-        thread_id = request.POST.get('thread_id')  # Get the thread_id from the form data
-        
-        post_form = PostForm(request.POST)  # Assuming you're using PostForm for creating posts
-        
-        if post_form.is_valid():
-            post = post_form.save(commit=False)
-            post.creator = request.user
-            post.thread_id = thread_id
-            if 'parent_post_id' in request.POST:
-                post.parent_post_id = request.POST.get('parent_post_id')
-            post.save()
-
-        return redirect('forum_two')  # Redirect back to the forum page
+    # Create or get the "Home" thread and a default category
+    default_category, _ = Category.objects.get_or_create(name="General")
     
+    # Use the 'admin' user as the default creator (change 'admin' to the desired username)
+    default_creator = User.objects.get(username='learnsync')
+
+    home_thread, created = Thread.objects.get_or_create(
+        title="Home",
+        defaults={
+            'category': default_category,
+            'creator': default_creator,
+        }
+    )
+
+    threads = Thread.objects.all()
+    categories = Category.objects.all()
+
+    # Check if a post has been liked
+    if 'like_post_id' in request.GET:
+        try:
+            post_to_like = Post.objects.get(pk=request.GET['like_post_id'])
+        except (ValueError, Post.DoesNotExist):
+            post_to_like = None
+
+        if post_to_like:
+            # Check if the user has already liked the post
+            if request.user in post_to_like.likes.all():
+                messages.warning(request, 'You have already liked this post.')
+            else:
+                post_to_like.likes.add(request.user)
+                messages.success(request, 'You have successfully liked the post.')
+
+    # Check if a post has been unliked
+    if 'unlike_post_id' in request.GET:
+        try:
+            post_to_unlike = Post.objects.get(pk=request.GET['unlike_post_id'])
+        except (ValueError, Post.DoesNotExist):
+            post_to_unlike = None
+
+        if post_to_unlike:
+            # Check if the user has already unliked the post
+            if request.user not in post_to_unlike.likes.all():
+                messages.warning(request, 'You have not liked this post.')
+            else:
+                post_to_unlike.likes.remove(request.user)
+                messages.success(request, 'You have successfully unliked the post.')
+
+    context = {
+        'posts': posts,
+        'threads': threads,
+        'categories': categories,
+        'create_thread_form': ThreadForm(),
+        'create_post_form': PostForm(),
+    }
+    return render(request, 'forum/forum_two.html', context)
+
+
+logger = logging.getLogger(__name__)
+
+
+def create_post(request):
+    if 'thread_id' in request.POST:
+        try:
+            thread = get_object_or_404(Thread, pk=request.POST['thread_id'])
+        except ValueError:
+            thread = None
+
+        if thread:
+            post_form = PostForm(request.POST)
+
+            if post_form.is_valid():
+                post = post_form.save(commit=False)
+                post.creator = request.user
+                post.thread = thread
+                if 'parent_post_id' in request.POST:
+                    parent_post_id = request.POST['parent_post_id']
+                    if parent_post_id:
+                        try:
+                            parent_post = Post.objects.get(pk=parent_post_id)
+                            post.parent_post = parent_post
+                        except Post.DoesNotExist:
+                            # Log an error and show an error message
+                            logger.error(f"Parent post with ID {parent_post_id} does not exist.")
+                            messages.error(request, 'Error: Parent post does not exist.')
+
+                post.save()
+                messages.success(request, 'Post successfully created.')
+
+    elif 'category' in request.POST:
+        try:
+            category = get_object_or_404(Category, pk=request.POST['category'])
+        except ValueError:
+            category = None
+
+        if category:
+            thread_form = ThreadForm(request.POST)
+
+            if thread_form.is_valid():
+                thread = thread_form.save(commit=False)
+                thread.creator = request.user
+                thread.category = category
+                thread.save()
+                messages.success(request, 'Thread successfully created.')
+
+    return redirect('forum_two')
     
 class UserFeedbackFormView(FormView):
     """

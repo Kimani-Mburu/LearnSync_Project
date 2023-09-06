@@ -23,6 +23,17 @@
 </head>
 <body style="font-family: 'EB Garamond', sans-serif; background-color: #f2f2f2; margin-top: 5px;">
 
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages-container" style="background-color: #87CEEB; padding: 10px;">
+            <ul class="messages" style="list-style-type: none; margin: 0; padding: 0;">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
     <!-- Navigation Bar -->
     {% include 'navbar.html' %}
 

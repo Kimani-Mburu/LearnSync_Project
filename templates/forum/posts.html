@@ -44,7 +44,7 @@
                     </span>
                 </div>
                 <div class="reply-form mt-3" style="display: none;">
-                    <form class="reply-form" method="POST">
+                    <form class="reply-form" method="POST" action="{% url 'create_post' %}">
                         {% csrf_token %}
                         <div class="form-group">
                             {{ create_post_form.content.label_tag }}
