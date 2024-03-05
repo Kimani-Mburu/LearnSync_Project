@@ -2,37 +2,36 @@
 {% load static %}
 
 {% block main %}
-<div class="container" style="margin-top: 20px;">
-    <h1 style="font-size: 24px; font-weight: bold; color: #007bff; margin-bottom: 20px;">Search Results for "{{ query }}"</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Search Results for "{{ query }}"</h1>
 
-    <form action="{% url 'learnsync_app:search_results' %}" method="GET" style="position: relative; margin-bottom: 20px;">
-        <input type="text" name="search" id="search-input" placeholder="Search papers, theses, and more" style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 20px;">
-        <button type="submit" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background-color: transparent; border: none;">
-            <i class="bi bi-search" style="font-size: 24px; color: #007bff;"></i>
-        </button>
+    <form action="{% url 'learnsync_app:search_results' %}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" id="search-input" class="form-control" placeholder="Search papers, theses, and more">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
     </form>
 
-    <div class="search-results-container">
+    <div class="search-results">
         {% if search_results %}
             {% for result in search_results %}
-                <div class="search-results-item" style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-                    <div class="result-info">
-                        <a href="{{ result.get_absolute_url }}" style="text-decoration: none; color: #007bff;">
-                            <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">{{ result.title }}</h2>
+                <div class="card mb-4 border-0">
+                    <div class="card-body">
+                        <a href="{{ result.get_absolute_url }}" class="text-decoration-none text-dark">
+                            <h5 class="card-title mb-2">{{ result.title }}</h5>
                         </a>
-                        <p style="font-size: 14px; color: #545454; margin-bottom: 5px;">{{ result.abstract|slice:200 }}</p>
-                        <a href="{{ result.get_absolute_url }}" style="font-size: 14px; color: #007bff; text-decoration: none;">Read more</a>
+                        <p class="card-text text-muted">{{ result.abstract|slice:200 }}</p>
+                        <a href="{{ result.get_absolute_url }}" class="btn btn-outline-success">Read more</a>
                     </div>
-                    <div class="result-link">
-                        <a href="{{ result.get_absolute_url }}" style="text-decoration: none; color: #007bff;">
-                            <span style="font-size: 14px;">{{ result.url }}</span>
-                        </a>
+                    <div class="card-footer bg-transparent border-0">
+                        <small class="text-muted">{{ result.url }}</small>
                     </div>
                 </div>
             {% endfor %}
         {% else %}
-            <p>No results found.</p>
+            <p class="text-muted">No results found.</p>
         {% endif %}
     </div>
 </div>
+
 {% endblock main %}

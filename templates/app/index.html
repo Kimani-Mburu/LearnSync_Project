@@ -19,109 +19,127 @@
 <!-- CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">    
+<style>
+    @keyframes slideRightToLeft {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+
+    .advert-strip {
+        background-color: #f5f8fa; /* Light blue background */
+        color: #007bff; /* Blue text color */
+        text-align: center;
+        padding: 10px 0;
+        font-size: 14px;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        white-space: nowrap;
+    }
+
+    .advert-strip p {
+        margin: 0;
+    }
+</style>
+
 {% endblock extra_stylesheets %}
 
 {% block main %}
  
 
-<!-- Bottom Navigation: Main Navigation Links -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="advert-strip" style="overflow: hidden;">
+    <p style="animation: slideRightToLeft 10s linear infinite; white-space: nowrap; margin: 0; color: #007bff;">
+        Advertise Here - Special Offer! Advertise Here - Special Offer! Advertise Here - Special Offer!
+    </p>
+</div>
+
+<!-- Header Section -->
+<header style="background-color: #007bff; padding: 50px 20px 20px; color: #fff; text-align: center;">
     <div class="container">
-        <a href="{% url 'learnsync_app:index' %}" class="navbar-brand d-lg-none">
-            Learn<span class="text-secondary font-weight-normal">Sync</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" style="transition: color 0.3s;">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" style="transition: color 0.3s;">About</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="transition: color 0.3s;">
-                        Categories
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
-                        <li><a class="dropdown-item" href="#">Category 1</a></li>
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" id="subcategoryDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Category 2</a>
-                            <ul class="dropdown-menu" aria-labelledby="subcategoryDropdown">
-                                <li><a class="dropdown-item" href="#">Subcategory 1</a></li>
-                                <li><a class="dropdown-item" href="#">Subcategory 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Category 3</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'forum_two' %}" style="transition: color 0.3s;">Forum</a>
-                </li>
-            </ul>
+        <div class="row">
+            <!-- Left Column: Text Content -->
+            <div class="col-md-6" style="border-right: 1px solid #fff; padding-right: 20px;">
+                <h1 style="font-size: 36px; margin-bottom: 20px; animation: fadeInUp 0.5s ease;">Unlock a World of Knowledge</h1>
+                <p style="font-size: 20px; margin-bottom: 20px; animation: fadeInUp 0.5s ease;">Access and purchase access to past research papers, thesis documents, and more.</p>
+            </div>
+            <!-- Right Column: Categories -->
+            <div class="col-md-6" style="padding-left: 20px;">
+                <div class="paper-categories">
+                    <h3 style="font-size: 24px; margin-bottom: 20px;">Explore by Subject</h3>
+                    <div class="category-buttons">
+                        <a href="#" class="btn btn-primary rounded-pill m-2" style="position: relative; overflow: hidden; transition: all 0.4s; text-decoration: none; color: #fff;">Mathematics<span style="position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background-color: rgba(255, 255, 255, 0.5); transition: all 0.4s; border-radius: 50%; transform: translate(-50%, -50%) scale(0);"></span></a>
+                        <a href="#" class="btn btn-primary rounded-pill m-2" style="position: relative; overflow: hidden; transition: all 0.4s; text-decoration: none; color: #fff;">Science<span style="position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background-color: rgba(255, 255, 255, 0.5); transition: all 0.4s; border-radius: 50%; transform: translate(-50%, -50%) scale(0);"></span></a>
+                        <a href="#" class="btn btn-primary rounded-pill m-2" style="position: relative; overflow: hidden; transition: all 0.4s; text-decoration: none; color: #fff;">Languages<span style="position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background-color: rgba(255, 255, 255, 0.5); transition: all 0.4s; border-radius: 50%; transform: translate(-50%, -50%) scale(0);"></span></a>
+                        <a href="#" class="btn btn-primary rounded-pill m-2" style="position: relative; overflow: hidden; transition: all 0.4s; text-decoration: none; color: #fff;">Social Studies<span style="position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background-color: rgba(255, 255, 255, 0.5); transition: all 0.4s; border-radius: 50%; transform: translate(-50%, -50%) scale(0);"></span></a>
+                        <a href="#" class="btn btn-primary rounded-pill m-2" style="position: relative; overflow: hidden; transition: all 0.4s; text-decoration: none; color: #fff;">Creative Arts<span style="position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background-color: rgba(255, 255, 255, 0.5); transition: all 0.4s; border-radius: 50%; transform: translate(-50%, -50%) scale(0);"></span></a>
+                        <a href="#" class="btn btn-primary rounded-pill m-2" style="position: relative; overflow: hidden; transition: all 0.4s; text-decoration: none; color: #fff;">Physical Education<span style="position: absolute; top: 50%; left: 50%; width: 300%; height: 300%; background-color: rgba(255, 255, 255, 0.5); transition: all 0.4s; border-radius: 50%; transform: translate(-50%, -50%) scale(0);"></span></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
-    <!-- Header Section -->
-    <header style="background-color: #007bff; padding: 20px; color: #fff; text-align: center;">
-        <h1 style="font-size: 36px; margin-bottom: 20px;">Unlock a World of Knowledge</h1>
-        <p style="font-size: 20px; margin-bottom: 20px;">Access and purchase access to past research papers, thesis documents, and more.</p>
-    </header>
+</header>
 
-    <!-- Main Content Section -->
-    <div style="max-width: 800px; margin: 0 auto; padding: 20px; text-align: center;">
-        <h2 style="font-size: 28px; margin-bottom: 20px;">Discover Valuable Research Materials</h2>
-        <p style="font-size: 18px; margin-bottom: 30px;">Explore our extensive collection of research papers, thesis documents, assignments, and more.</p>
-        <!-- Search Form -->
-        <form action="{% url 'learnsync_app:search_results' %}" method="GET" style="position: relative;">
-            <input type="text" name="search" id="search-input" placeholder="Search papers, theses, and more" style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ccc; border-radius: 20px;">
-            <button type="submit" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background-color: transparent; border: none;">
-                <i class="bi bi-search" style="font-size: 24px; color: #007bff;"></i>
-            </button>
-            <div id="search-suggestions-container" class="dropdown-menu" aria-labelledby="search-input" style="display: none; position: absolute; width: 100%; max-height: 200px; overflow-y: auto; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 10px;">
-                <!-- Suggestions will be displayed here -->
+
+
+<!-- Main Content Section -->
+<div style="max-width: 800px; margin: 0 auto; padding: 20px; text-align: center;">
+    <h2 style="font-size: 28px; margin-bottom: 20px;">Discover Valuable Research Materials</h2>
+    <p style="font-size: 18px; margin-bottom: 30px;">Explore our extensive collection of research papers, thesis documents, assignments, and more.</p>
+
+    <!-- Search Form -->
+    <form action="{% url 'learnsync_app:search_results' %}" method="GET" style="position: relative; margin-bottom: 20px;">
+        <div class="row">
+            <div class="col-md-6" style="position: relative;">
+                <input type="text" name="search" id="search-input" placeholder="Search papers, theses, and more" style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #007bff; border-radius: 20px; transition: border-color 0.3s;">
+                <div id="search-suggestions-container" class="dropdown-menu" aria-labelledby="search-input" style="display: none; position: absolute; top: calc(100% + 5px); left: 0; z-index: 999; width: calc(100% - 4px); max-height: 200px; overflow-y: auto; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 10px;">
+                    <!-- Suggestions will be displayed here -->
+                </div>
             </div>
-        </form>
-
-        
-        
-        
-        
-          
-           
-
-        <p></p>
-        <p></p>
-        <p></p>
-        {% comment %} <a href="#" style="display: inline-block; margin-top: 30px; padding: 12px 24px; background-color: #007bff; color: #fff; font-size: 20px; font-weight: bold; text-decoration: none; border-radius: 4px;">Get Started</a> {% endcomment %}
-      </div>
-
-      <section style="display: flex; align-items: center; justify-content: space-between; background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.2BmhfYww-JdRCiL6fudgNwHaC9%26pid%3DApi&f=1&ipt=f9e8cecab0a552a4863e079cfd0bd6ed069ef140b917c26f6fc8a28b3bf46d01&ipo=images'); background-size: cover; background-position: center; padding: 60px;">
-        <div style="flex-basis: 50%; position: relative;">
-          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); transition: opacity 0.5s;"></div>
+            
+            <div class="col-md-4" style="position: relative;">
+                <select name="category" id="category-select" class="form-select" style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #007bff; border-radius: 20px; transition: border-color 0.3s;">
+                    <option value="" selected disabled>Select Category</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                    <option value="languages">Languages</option>
+                    <option value="social-studies">Social Studies</option>
+                    <option value="creative-arts">Creative Arts</option>
+                    <option value="physical-education">Physical Education</option>
+                </select>
+                <i class="bi bi-caret-down" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); color: #007bff;"></i>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" style="width: 100%; padding: 12px; font-size: 16px; background-color: #007bff; color: #fff; border: none; border-radius: 20px; transition: background-color 0.3s;">Search</button>
+            </div>
         </div>
+    </form>
+    
+
+    <section style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(to right, #007bff, #00bfff); padding: 60px; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%);">
         <div style="flex-basis: 45%;">
-          <h2 style="font-size: 32px; font-weight: bold; margin-bottom: 20px; color: #fff;">Unlock the World of Knowledge</h2>
-          <p style="font-size: 18px; color: #fff; line-height: 1.5; margin-bottom: 20px;">Discover a treasure trove of academic resources, research papers, and scholarly articles covering various fields of study. Expand your knowledge and stay informed with the latest findings and developments.</p>
-          <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
-            <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Access a vast collection of research materials</li>
-            <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Explore diverse academic disciplines</li>
-            <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Stay up-to-date with cutting-edge research</li>
-            <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Find valuable insights and scholarly perspectives</li>
-          </ul>
-          <a href="{% url 'subscription:subscription_plan_list' %}" style="display: inline-block; padding: 12px 24px; background-color: #fff; color: #007bff; font-size: 20px; font-weight: bold; text-decoration: none; border-radius: 4px;">Get Started</a>
+            <div style="text-align: left;">
+                <h2 style="font-size: 32px; font-weight: bold; margin-bottom: 20px; color: #fff;">Empower Your Learning Journey</h2>
+                <p style="font-size: 18px; color: #fff; line-height: 1.5; margin-bottom: 20px;">Unlock a wealth of educational resources and enhance your academic pursuits. From research papers to scholarly articles, explore diverse subjects and stay ahead in your studies.</p>
+                <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+                    <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Access a wide range of educational materials</li>
+                    <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Dive deep into various academic disciplines</li>
+                    <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Stay updated with the latest research and findings</li>
+                    <li style="font-size: 18px; color: #fff; margin-bottom: 10px;"><i class="bi bi-check-circle-fill" style="color: #fff;"></i> Gain valuable insights and knowledge resources</li>
+                </ul>
+                <a href="{% url 'subscription:subscription_plan_list' %}" style="display: inline-block; padding: 12px 24px; background-color: #fff; color: #007bff; font-size: 20px; font-weight: bold; text-decoration: none; border-radius: 4px;">Get Started</a>
+            </div>
         </div>
-      </section>
+    </section>
+    
+
+    
+</div>
+
 
 <!-- Testimonials Section -->
 <section style="background-color: #f2f2f2; padding: 50px; text-align: center;">
-    <h3 style="font-size: 24px; margin-bottom: 20px;">What Our Customers Say</h3>
-    <div class="row">
+        <h3 style="font-size: 24px; margin-bottom: 20px;">What Our Customers Say</h3>
+        <div class="row">
         <div class="col-md-4">
             <div class="testimonial-card" style="background-color: #fff; border-radius: 10px; padding: 20px; margin-bottom: 20px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 16px rgba(0, 0, 0, 0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
                 <img src="{% static 'img/img.jpg' %}" alt="Person 1" class="card-img-top" style="border-radius: 50%; padding: 20px; height: 150px; width: 150px; object-fit: cover; margin: auto;">

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Thread Headline -->
+    <h1 class="thread-headline mb-4" style="font-size: 28px; font-weight: bold;">{{ thread.title }}</h1>
+
+    <!-- Create New Post Form -->
+    <div class="create-post-form card mb-4">
+        <div class="card-body">
+            <form class="post-form" method="POST" action="{% url 'create_post' %}">
+                {% csrf_token %}
+                <input type="hidden" name="thread_id" value="{{ thread.id }}">
+                <div class="form-group">
+                    {{ create_post_form.content.label_tag }}
+                    {{ create_post_form.content }}
+                </div>
+                <div class="form-group d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <label for="post-photo" class="btn btn-light btn-sm rounded-pill mr-2">
+                            <i class="bi bi-image"></i> Add Photo
+                        </label>
+                        <input type="file" id="post-photo" class="d-none" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm rounded-pill">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Posts -->
+    {% for post in posts %}
+    <div class="post-container card mb-4">
+        <div class="card-body">
+            <div class="post-header d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'img/img.jpg' %}" alt="Profile Image" style="width: 48px; height: 48px; border-radius: 50%; margin-right: 12px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <div>
+                        <h5 class="card-title mb-1" style="font-size: 18px; font-weight: bold; color: #1da1f2;">{{ post.creator.username }}</h5>
+                        <p class="username mb-0" style="font-size: 14px; color: #999;">@{{ post.creator.username }}</p>
+                    </div>
+                </div>
+                <div>
+                    <i class="bi bi-three-dots-vertical" style="font-size: 18px; color: #999; cursor:pointer;"></i>
+                </div>
+            </div>
+            <div>
+                <p class="card-text" style="font-size: 16px; color: #333; margin-top: 10px;">
+                    {{ post.content }}
+                </p>
+
+                <!-- Include post image if available -->
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Post Image" style="width: 100%; max-width: 600px; height: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                {% endif %}
+
+                <div class="post-meta d-flex justify-content-between align-items-center flex-wrap" style="margin-top: 20px; color: #000;">
+                    <span class="icon view-icon mb-2 mb-md-0" style="cursor: pointer;">
+                        <i class="bi bi-eye-fill"></i> {{ post.view_count }} views
+                    </span>
+                    <span class="icon like-icon mb-2 mb-md-0" onclick="toggleLike(this)" style="cursor: pointer;">
+                        <i class="bi bi-heart-fill {% if post.liked_by_user %}text-danger{% endif %}"></i> {{ post.likes }} likes
+                    </span>
+                    <span class="icon reply-icon mb-2 mb-md-0" onclick="toggleReplyForm(this)" style="cursor: pointer;">
+                        <i class="bi bi-chat-fill"></i> {{ post.calculate_replies }} replies
+                    </span>
+                    <span class="icon share-icon mb-2 mb-md-0" onclick="openSharePopup()" style="cursor: pointer;">
+                        <i class="bi bi-arrow-repeat"></i> Share
+                    </span>
+                </div>
+                <div class="reply-form mt-3" style="display: none;">
+                    <form class="reply-form" method="POST" action="{% url 'create_post' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ create_post_form.content.label_tag }}
+                            {{ create_post_form.content }}
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <label for="post-photo" class="btn btn-light btn-sm rounded-pill mr-2">
+                                    <i class="bi bi-image"></i> Add Photo
+                                </label>
+                                <input type="file" id="post-photo" class="d-none" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm rounded-pill">Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
